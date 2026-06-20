@@ -25,6 +25,17 @@ backdrop-filter: blur(8px);
   @include bp-max(xl){
     display:none;
   }
+
+  animation: cardFloat 4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 // Separate clip layer for the glow blob only — keeps backdrop-filter working on .card
@@ -81,6 +92,7 @@ backdrop-filter: blur(8px);
 .cardLeft {
   left: calc(50% - 39.4375rem);
   top: 7.5rem;
+  animation-delay: -2s; // out of sync with the right card
 }
 
 // ── Right card ────────────────────────────────────────────────

@@ -263,6 +263,37 @@
   }
 }
 
+// Decorative dot grids — same source image + mask technique as Hero's
+// floating-card dots, sized to this footer's smaller Figma mask (300px vs 500px).
+// One sits behind the chandelier card's lower half, one behind the
+// YouTube card's left edge.
+.dots {
+  position: absolute;
+  width: 18.75rem; // 300px
+  height: 18.75rem; // 300px
+  background-image: url('/debab767063c8a193d699a396e7a35ce877bf895.png');
+  background-position: center;
+  background-size: 118.17rem auto; // 1890px — same scale as Hero, keeps dot density consistent
+  mask-image: radial-gradient(circle at center, black 0%, transparent 60%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 60%);
+  z-index: 0; // behind both photo cards
+  pointer-events: none;
+
+  @include bp-max(lg) {
+    display: none; // mobile/tablet collage collapses to a thin strip — no room for the grid
+  }
+}
+
+.dotsTopRight {
+  left: 61%;
+  top: 41%;
+}
+
+.dotsBottomLeft {
+  left: -5%;
+  top: 49%;
+}
+
 .photo {
   width:330px;
   height: 430px;

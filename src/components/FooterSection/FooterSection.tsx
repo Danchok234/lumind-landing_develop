@@ -143,6 +143,8 @@ export default function FooterSection() {
 
           {/* Decorative overlapping event photos */}
           <div className={styles.collage} aria-hidden="true">
+            <div className={`${styles.dots} ${styles.dotsTopRight}`} />
+            <div className={`${styles.dots} ${styles.dotsBottomLeft}`} />
             <div className={`${styles.photo} ${styles.photoBack}`}>
               <Image
                 src={IMG_BACK}
