@@ -1,0 +1,388 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+// ── Section shell ───────────────────────────────────────────
+// 20px left/right padding on the section (as required).
+.whyUs {
+  width: 100%;
+  padding: 7.5rem 20px; // 120px top/bottom on desktop
+  background-color: $color-background;
+
+  @include bp-max(xl) {
+    padding: 5rem 20px; // 80px top/bottom · 20px sides
+  }
+}
+
+// Centered content column (Figma desktop content width = 1420px)
+.inner {
+  width: 100%;
+  max-width: $grid-container-width; // 1420px
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.75rem; // 60px (desktop section gap)
+
+  @include bp-max(xl) {
+    gap: 2.5rem; // 40px (mobile section gap)
+  }
+}
+
+// ── Header (title + subtitle) ───────────────────────────────
+// Row space-between on desktop → stacked (flex) on mobile/tablet.
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2.5rem;
+
+  @include bp-max(xl) {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 0.625rem; // 10px
+  }
+}
+
+// Title kept at DESKTOP H2 sizing on every viewport (no mobile shrink).
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h2; // 48px everywhere
+  line-height: $line-height-h2; // 1.2
+  letter-spacing: $letter-spacing-h2; // -3%
+  color: $color-black;
+  max-width: 41rem; // keep heading from over-stretching
+
+  .accent {
+    color: $color-purple;
+  }
+
+  @include bp-max(md) {
+    font-size: 30px;
+  }
+
+  @include bp-max(sm) {
+    font-size: 28px;
+  }
+}
+
+.subtitle {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p; // 17px
+  line-height: $line-height-p;
+  letter-spacing: $letter-spacing-p;
+  color: $color-black-700;
+  flex: 0 0 auto;
+  max-width: 25rem; // ~400px right-hand column
+
+  @include bp-max(xl) {
+    flex: 0 1 auto;
+    max-width: none;
+  }
+  @include bp-max(md) {
+    font-size: 20px;
+  }
+  @include bp-max(sm) {
+    font-size: 15px;
+  }
+}
+
+// ── Cards row ───────────────────────────────────────────────
+// Grid on desktop, flex on mobile/tablet.
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 36.25rem) 1fr; // 580px + remainder
+  align-items: stretch; // both blocks fill the same row height
+  gap: 1.25rem; // 20px
+
+  @include bp-max(xl) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+// ── Purple block (mobile design, identical on all viewports) ─
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem; // 40px between text and icon
+  width: 100%;
+  max-width: none;
+  padding: 30px;
+  height: 280px;
+  min-height: 34.375rem; // 550px
+  background-color: $color-purple;
+  border-radius: 16px;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.02);
+
+  @include bp-max(xl) {
+    padding: 30px;
+    height: 400px;
+    min-height: 400px;
+  }
+
+  @include bp-max(md) {
+    flex-direction: column;
+    padding: 20px;
+    height: auto;
+    min-height: 0;
+  }
+}
+
+.blockText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; // 12px
+}
+
+.blockTitle {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 32px; // desktop/h3
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-background; // #F6F6F6
+
+  @include bp-max(md) {
+    font-size: 20px;
+  }
+}
+
+.blockDesc {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: 20px; // desktop description
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: rgba($color-white, 0.5);
+  @include bp-max(md) {
+    font-size: 12px;
+  }
+}
+
+// 0% icon — the focal/decorative element of the block.
+.blockIcon {
+  display: block;
+  width: 390px; // matches desktop icon footprint
+  height: auto;
+  max-width: 100%;
+
+  @include bp-max(xl) {
+    width: 390px;
+    align-self: flex-end; // mobile
+  }
+  @include bp-max(md) {
+    width: 190px;
+    align-self: flex-start;
+  }
+}
+
+// ── White block modifier (second block: 1000+ organisations) ─────────
+// SVG is always absolutely positioned at the top; text always at the bottom.
+// Only padding, icon size/position, and min-height change per breakpoint.
+.blockLight {
+  width: 100%;
+  background-color: $color-white;
+  position: relative;
+  overflow: hidden; // clips any SVG overflow at the right edge
+  padding: 60px;
+  justify-content: flex-end; // text pinned to bottom
+
+  // ── Text colour overrides (light background) ─────────────────────────
+  .blockTitle {
+    color: $color-black;
+  }
+
+  .blockDesc {
+    color: rgba(32, 32, 32, 0.7);
+  }
+
+  .blockText {
+    gap: 1rem; // 16px (Figma desktop)
+  }
+
+  // ── 1000+ SVG: always absolute ──────────────────────────────────────
+  // Exact viewBox dimensions → no stretching on any viewport.
+  .blockIcon {
+    position: absolute;
+    top: 3.75rem; // 60px — matches desktop padding
+    left: 3.75rem; // 60px
+    width: 48.375rem; // 774px (viewBox width)
+    height: 12.25rem; // 196px (viewBox height)
+    max-width: none;
+    align-self: unset;
+  }
+
+  @media (max-width: 1440px) {
+    .blockIcon {
+      width: 700px;
+      height: 177.058px;
+    }
+  }
+  @media (max-width: 1366px) {
+    .blockIcon {
+      width: 650px;
+      height: 164.411px;
+    }
+  }
+
+  // ─ Tablet (≤1280px): cards stack, padding tightens ─────────────────
+  @include bp-max(xl) {
+    padding: 30px;
+    height: auto;
+    min-height: 25rem; // SVG (86px top 30px) + gap + text comfortably
+
+    .blockIcon {
+      top: 1.875rem; // 30px (matches reduced padding)
+      left: 1.875rem; // 30px
+      width: 600px; // 340px
+      height: 151.76px; // 86px
+    }
+  }
+
+  // ─ After lg (≤1024px): shrink icon to 340×86px ──────────────────────
+
+  // ─ Mobile (≤768px): Figma node 350:535 ──────────────────────────────
+  // SVG: left:20px top:28.54px 340×86px; text: 20px/12px; gap:60px implicit
+  @include bp-max(md) {
+    padding: 20px;
+    min-height: 280px; // ~320px — SVG bottom (115px) + ~60px gap + text
+
+    .blockIcon {
+      top: 1.785rem; // 28.54px (Figma)
+      left: 1.25rem; // 20px (matches mobile padding)
+      width: 400px;
+      height: 101.176px;
+    }
+
+    .blockTitle {
+      font-size: 20px; // mobile/h3
+      letter-spacing: -0.025em;
+    }
+
+    .blockDesc {
+      font-size: 12px; // mobile/small text
+      color: rgba(32, 32, 32, 0.5); // Figma: opacity-50 on text element
+    }
+
+    .blockText {
+      gap: 0.75rem; // 12px (Figma mobile)
+    }
+  }
+
+  @include bp-max(sm) {
+    .blockIcon {
+      width: 330px;
+      height: 83.47px;
+    }
+  }
+}
+
+// ── Third block (full-width photo card + white text panel) ──────────────
+// Desktop (Figma #2028:329): 1420×560 photo card with a 580×440 white panel
+// pinned to the LEFT edge (rounded on its right side), vertically centred.
+.blockThird {
+  grid-column: 1 / -1; // span full width of the cards grid
+  width: 100%;
+  height: 560px;
+  min-height: 0;
+  padding: 0;
+  position: relative;
+  flex-direction: row;
+  align-items: center;        // 60px photo strip above/below the 440px panel
+  justify-content: flex-start; // white panel on the LEFT
+  background: url('/third-block-bg.jpg') center / cover no-repeat;
+  border-radius: 16px;
+  overflow: hidden;
+
+  // White text panel
+  .blockText {
+    width: 580px;
+    height: 440px;
+    padding: 60px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between; // text group top · button bottom
+    gap: 0;
+    border-radius: 0 16px 16px 0;   // flush against left edge → rounded right
+    background: $color-white;
+    box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.02);
+  }
+
+  .textContent {
+    display: flex;
+    width: 460px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    span {
+      font-weight: 700; // "right" / "AI-driven" emphasis
+    }
+  }
+
+  .blockTitle {
+    color: $color-black;
+    font-size: 32px;          // desktop/h3
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .blockDesc {
+    color: $color-black-700;  // rgba(32,32,32,0.7)
+    font-size: 17px;          // desktop/p
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+    text-align: left;
+  }
+
+  @include bp-max(xl){
+    height: 460px;
+    .blockText{
+      height: 340px;
+      padding: 30 40 30 40px;
+    }
+  }
+
+  // ── Mobile/tablet (Figma #350:540): photo frame around a full-width
+  //    white card; text left-aligned; full-width button. ────────────────
+  @include bp-max(md) {
+    height: auto;
+    justify-content: center;
+    padding: 20px;            // photo frame revealed around the white card
+
+    .blockText {
+      max-width: 500px;
+      width: 100%;
+      height: auto;
+      padding: 20px;
+      border-radius: 16px;    // fully rounded (no longer flush to an edge)
+      gap: 60px;              // Figma mobile gap: text group → button
+    }
+
+    .textContent {
+      width: 100%;
+      gap: 12px;
+    }
+
+    .blockTitle {
+      font-size: 20px;        // mobile/h3
+    }
+
+    .blockDesc {
+      font-size: 12px;        // mobile/small text
+      color: rgba(32, 32, 32, 0.5);
+    }
+
+    .thirdBtn {
+      width: 100%;
+      height: 50px;
+    }
+  }
+}

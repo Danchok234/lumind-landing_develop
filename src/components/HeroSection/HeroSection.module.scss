@@ -1,0 +1,295 @@
+@use '@/styles/mixins' as *;
+
+.hero {
+  width: 100%;
+  padding-top: 10.875rem;
+  padding-bottom: 5.5rem;
+  overflow: hidden;
+
+  background:
+    linear-gradient(180deg, rgba(204, 184, 255, 0.18) 0%, rgba(246, 246, 246, 0) 55%),
+    var(--color-background);
+
+  // The inner .wrapper div handles centering and max-width
+  // .hero itself is just a full-width background container
+
+  @include bp-max(md) {
+    padding-top: 7.375rem;
+    padding-bottom: 3rem;
+  }
+}
+
+// ── Text block ──────────────────────────────────────────────
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.875rem; // 30px desktop
+  width: 100%;
+  padding: 0 1.25rem;
+
+  @include bp-max(md) {
+    gap: 0.625rem; // 10px mobile
+  }
+}
+
+// ── H1 ───────────────────────────────────────────────────────
+.title {
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--color-black);
+  text-align: center;
+
+  // Desktop: 96px, max-width matching Figma's 1022px
+  font-size: 6rem;           // 96px
+  letter-spacing: -0.04em;  // -4%
+  max-width: 63.875rem;      // 1022px
+
+  // Tablet
+  @include bp-max(xl) {
+    font-size: 4.5rem;       // 72px
+    max-width: 48rem;
+  }
+
+  @include bp-max(lg) {
+    font-size: 4.5rem;      // 52px
+    max-width: 70%;
+  }
+
+  // Mobile: 36px, full width
+  @include bp-max(md) {
+    font-size: 3.25rem;      // 36px
+    letter-spacing: -0.04em;
+    max-width: 100%;
+  }
+}
+
+// ── Accent word ("matter") ────────────────────────────────────
+.accent {
+  font-style: italic;
+  // inline-block + padding-right gives the italic slant room on the right
+  // so the last glyph isn't cropped by the background-clip box
+  display: inline-block;
+  padding-right: 0.12em;
+
+  // Symmetrical gradient: starts and ends at the same color so the
+  // tile boundary is invisible when the animation loops.
+  background: linear-gradient(
+    120deg,
+    #5b2ff0 0%,    // deep purple
+    #8355f8 25%,   // brand purple
+    #c4abff 50%,   // light lavender highlight
+    #8355f8 75%,   // brand purple
+    #5b2ff0 100%   // deep purple — identical to 0%, seamless tile
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  // Glow (works alongside background-clip:text via filter)
+  filter: drop-shadow(0 0 28px rgba(131, 85, 248, 0.45));
+
+  // Sweep exactly one tile-width (200%) so the loop is imperceptible
+  animation: matterShimmer 3.5s linear infinite;
+}
+
+@keyframes matterShimmer {
+  0%   { background-position: 0%   center; }
+  100% { background-position: 200% center; }
+}
+
+// ── Subtitle ─────────────────────────────────────────────────
+.subtitle {
+  font-family: var(--font-satoshi);
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  color: var(--color-black);
+
+  // Desktop: 17px / 70% opacity / max 608px
+  font-size: 1.0625rem;     // 17px
+  letter-spacing: -0.02em; // -2%
+  opacity: 0.7;
+  max-width: 38rem;         // 608px
+
+  // Tablet
+  @include bp-max(lg) {
+    max-width: 28rem;
+  }
+
+  // Mobile: 15px / 80% opacity / full width
+  @include bp-max(md) {
+    font-size: 0.9375rem;   // 15px
+    letter-spacing: -0.02em;
+    opacity: 0.8;
+    max-width: 70%;
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// ── Hero image cards ─────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────────
+
+.imagesArea {
+  position: relative;
+  width: 100%;
+  height: 24rem;
+  margin-top: 130px;
+  flex-shrink: 0;
+  top: -24px;
+
+  @include bp-max(lg) {
+    height: 18rem;
+    margin-top: 130px;
+  }
+
+  // md → sm: taller container for the bigger medium cards
+  @include bp-max(md) {
+    height: 13rem;
+    margin-top: 100px;
+  }
+
+  // sm and below: current small mobile size
+  @include bp-max(sm) {
+    height: 9rem;
+    margin-top: 70px;
+    top:0;
+  }
+}
+
+// ── Shared card base ──────────────────────────────────────────
+.card {
+  position: absolute;
+  overflow: clip;
+  pointer-events: none;
+  border-radius: 1rem 1rem 0 0;
+
+  width: 28.24rem;
+  height: 30.96rem;
+
+  @include bp-max(lg) {
+    width: 22rem;
+    height: 24rem;
+  }
+
+  // md → sm: bigger intermediate size
+  @include bp-max(md) {
+    width: 18rem;
+    height: 20rem;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  // sm and below: small mobile (Figma mobile values)
+  @include bp-max(sm) {
+    width: 10.93rem;
+    height: 12.3rem;
+    border-radius: 0.4375rem 0.4375rem 0 0;
+  }
+}
+
+// ── Left card ──────────────────────────────────────────────────
+// Forms the / side of the /\ tent. Right edge anchored near center,
+// rotated CW + skewed right. Sits slightly LOWER than right card.
+// Shadow pulls left (-X) giving depth to the left.
+.cardLeft {
+  right: calc(50% + 0.25rem);
+  top: 2rem;
+  transform: rotate(7deg) scaleY(0.97) skewX(14deg);
+  box-shadow: -1.25rem 1.25rem 4rem 0.75rem rgba(21, 0, 72, 0.12);
+  z-index: 1;
+
+  @include bp-max(lg) {
+    right: calc(50% - 1.75rem);
+  }
+
+  // md → sm: 18rem cards — pair width = 16.38rem offset + 18rem = 34.38rem, half = 17.19rem
+  @include bp-max(md) {
+    right: auto;
+    left: calc(50% - 17.19rem);
+    top: 1rem;
+    box-shadow: -0.9rem 0.9rem 2.88rem 0.54rem rgba(21, 0, 72, 0.12);
+  }
+
+  // sm and below: small mobile
+  @include bp-max(sm) {
+    left: calc(50% - 10.39rem);
+    top: 0.765rem;
+    box-shadow: -0.547rem 0.547rem 1.75rem 0.328rem rgba(21, 0, 72, 0.12);
+  }
+}
+
+// ── Right card ────────────────────────────────────────────────
+// Forms the \ side of the /\ tent. Left edge anchored near center,
+// rotated CCW + skewed left. Sits HIGHER (top:0) than left card.
+// Shadow pulls right (+X) giving depth to the right.
+.cardRight {
+  left: calc(50% - 2.5625rem);
+  top: 0;
+  transform: rotate(-7deg) scaleY(0.97) skewX(-14deg);
+  box-shadow: 1.25rem 1.25rem 4rem 0.75rem rgba(21, 0, 72, 0.12);
+  z-index: 2;
+
+  @include bp-max(lg) {
+    left: calc(50% - 0.5625rem);
+  }
+
+  // md → sm: right card = 50% - 17.19rem + 16.38rem = 50% - 0.81rem
+  @include bp-max(md) {
+    left: calc(50% - 0.81rem);
+    top: 0;
+    box-shadow: 0.9rem 0.9rem 2.88rem 0.54rem rgba(21, 0, 72, 0.12);
+  }
+
+  // sm and below: small mobile
+  @include bp-max(sm) {
+    left: calc(50% - 0.55rem);
+    top: 0;
+    box-shadow: 0.547rem 0.547rem 1.75rem 0.328rem rgba(21, 0, 72, 0.12);
+  }
+}
+
+// ── Card inner (image wrapper) ────────────────────────────────
+.cardInner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+// ── Left card image — zoomed crop from Figma ──────────────────
+// Figma: h=166.16%, left=-2.49%, top=-10.57%, w=120.48%
+.cardImgLeft {
+  position: absolute !important;
+  width: 120.48% !important;
+  height: 166.16% !important;
+  left: -2.49% !important;
+  top: -10.57% !important;
+  object-fit: cover;
+  max-width: none !important;
+}
+
+// ── Right card image — full cover ────────────────────────────
+.cardImgRight {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+// ── Glass gloss overlay (both cards) ─────────────────────────
+// Figma: inset 0 0 64px rgba(255,255,255,0.5) on desktop
+//        inset 0 0 27.985px rgba(255,255,255,0.5) on mobile
+.cardGloss {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 4rem rgba(255, 255, 255, 0.5); // 64px
+
+  @include bp-max(md) {
+    box-shadow: inset 0 0 1.75rem rgba(255, 255, 255, 0.5); // 27.985px
+  }
+}

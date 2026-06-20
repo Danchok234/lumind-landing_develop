@@ -1,0 +1,244 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+// ── Section shell ───────────────────────────────────────────
+.faq {
+  width: 100%;
+  padding: 7.5rem 20px; // 120px top/bottom on desktop · 20px sides
+  background-color: $color-background;
+
+  @include bp-max(md) {
+    padding: 1rem 20px; // 80px top/bottom on mobile
+  }
+}
+
+// Centered content column. Figma desktop content width for this frame = 1180px.
+.inner {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3.75rem; // 60px (desktop title → list gap)
+
+  @include bp-max(md) {
+    gap: 2.5rem; // 40px (mobile)
+  }
+}
+
+// ── Section title ("In case you have questions left.") ──
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h2; // 48px
+  line-height: $line-height-h2; // 1.2
+  letter-spacing: $letter-spacing-h2; // -3%
+  text-align: center;
+  color: $color-black;
+
+  .accent {
+    color: $color-purple;
+  }
+
+  @include bp-max(md) {
+    font-size: 28px; // mobile/h2
+  }
+}
+
+// ── Accordion list ──────────────────────────────────────────
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px (desktop)
+
+  @include bp-max(md) {
+    gap: 0.625rem; // 10px (mobile)
+  }
+}
+
+// ── Single question card ────────────────────────────────────
+.card {
+  width: 100%;
+  border-radius: 16px;
+  background-color: $color-white;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.02);
+  padding-inline: 60px;
+  overflow: hidden;
+
+  @include bp-max(xl) {
+    padding-inline: 40px;
+  }
+  @include bp-max(md) {
+    padding-inline: 20px;
+  }
+}
+
+// Clickable header row — question text + circular +/− toggle.
+// Collapsed cards are 120px tall (Figma); on mobile they hug with 20px padding.
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  min-height: 120px;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  transition: min-height 0.3s ease, padding-top 0.3s ease;
+
+  @include bp-max(md) {
+    min-height: 0;
+    padding-block: 20px;
+    gap: 16px;
+  }
+}
+
+// When open, the question pulls to the top of the card (Figma expanded padding
+// is 36px 60px) so the answer can sit beneath it.
+.cardOpen .header {
+  min-height: 0;
+  padding-top: 36px;
+
+  @include bp-max(md) {
+    padding-top: 20px;
+    padding-bottom: 0;
+  }
+}
+
+.question {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h3; // 32px
+  line-height: $line-height-h3; // 1.2
+  letter-spacing: $letter-spacing-h3; // -2%
+  color: $color-black;
+
+  @include bp-max(xl) {
+    font-size: 26px;
+  }
+  @include bp-max(md) {
+    font-size: 18px; // mobile/h4
+  }
+}
+
+// ── Circular toggle (purple disc with white +/−) ────────────
+.icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 100px;
+  background-color: $color-purple;
+
+  @include bp-max(md) {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+// Two bars form a "+"; the vertical bar collapses on open → "−".
+.iconBar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16.88px;
+  height: 2.86px;
+  border-radius: 2px;
+  background-color: $color-white;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+
+  @include bp-max(md) {
+    width: 13px;
+    height: 2.2px;
+  }
+}
+
+.iconBarV {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.cardOpen .iconBarV {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+}
+
+// ── Expanding answer panel (smooth height via grid-rows trick) ──
+.answerWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.cardOpen .answerWrap {
+  grid-template-rows: 1fr;
+}
+
+// The clipper: padding-free so `overflow: hidden` fully hides the body at 0fr
+// (an element's own padding isn't clipped by its overflow, which is what leaked
+// before). `min-height: 0` lets the grid item shrink past its content size.
+.answerInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+// All spacing + content lives here, inside the clipper. The text fades in only
+// once the height has finished expanding (delayed opacity on open), and fades
+// straight out on close.
+.answerBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
+  padding-bottom: 36px;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+
+  @include bp-max(md) {
+    gap: 16px;
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+}
+
+.cardOpen .answerBody {
+  opacity: 1;
+  transition: opacity 0.22s ease 0.22s; // wait for the height to open, then fade in
+}
+
+.divider {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: $color-black-100; // rgba(32,32,32,0.1)
+}
+
+.answer {
+  max-width: 650px;
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: 16px; // desktop/small text
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: $color-black-700; // rgba(32,32,32,0.7)
+
+  @include bp-max(md) {
+    font-size: 14px;
+    max-width: none;
+  }
+}
+
+// Respect reduced-motion: drop the expand/icon transitions.
+@media (prefers-reduced-motion: reduce) {
+  .answerWrap,
+  .answerBody,
+  .header,
+  .iconBar {
+    transition: none;
+  }
+}

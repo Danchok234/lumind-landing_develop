@@ -1,0 +1,130 @@
+// ----------------------------------------------------------
+// BREAKPOINTS
+// Based on Figma frames:
+//   Desktop frame: 1920px wide, content: 1420px
+//   Mobile frame:  375px wide,  content: 355px
+// ----------------------------------------------------------
+$bp-xs:   375px;   // Mobile (Figma mobile frame)
+$bp-sm:   640px;   // Small tablet / large phone (landscape)
+$bp-md:   768px;   // Tablet portrait
+$bp-lg:   1024px;  // Tablet landscape / small laptop
+$bp-xl:   1280px;  // Laptop
+$bp-2xl:  1440px;  // Desktop (Figma desktop content fits at ~1420px)
+$bp-3xl:  1920px;  // Wide desktop (Figma desktop frame)
+
+// Mixins for min-width (mobile-first)
+// Usage: @include bp(md) { ... }
+// Breakpoints map for use in loops
+$breakpoints: (
+  'xs':  $bp-xs,
+  'sm':  $bp-sm,
+  'md':  $bp-md,
+  'lg':  $bp-lg,
+  'xl':  $bp-xl,
+  '2xl': $bp-2xl,
+  '3xl': $bp-3xl,
+);
+
+
+// Primary
+$color-purple:        #8355F8;
+$color-light-purple:  #E6DCFF;
+
+// Feedback
+$color-error:         #FF5F5F;
+
+// Neutrals
+$color-black:         #202020;
+$color-black-700:     rgba(32, 32, 32, 0.70);
+$color-black-250:     rgba(32, 32, 32, 0.25);
+$color-black-100:     rgba(32, 32, 32, 0.10);
+
+// Whites
+$color-white:         #FFFFFF;
+$color-white-600:     rgba(255, 255, 255, 0.60);
+$color-white-250:     rgba(255, 255, 255, 0.25);
+
+// Background
+$color-background:    #F6F6F6;
+
+// ----------------------------------------------------------
+// TYPOGRAPHY - FONT FAMILIES
+// ----------------------------------------------------------
+$font-satoshi:  'Satoshi', sans-serif;
+$font-poppins:  'Poppins', sans-serif;
+
+// ----------------------------------------------------------
+// TYPOGRAPHY - DESKTOP SCALE (Satoshi)
+// ----------------------------------------------------------
+
+// H1 — 96px / 110% line-height / -4% letter-spacing
+$font-size-h1:          96px;
+$line-height-h1:        1.10;
+$letter-spacing-h1:     -0.04em; // -4%
+
+// H2 — 48px / 120% line-height / -3% letter-spacing
+$font-size-h2:          48px;
+$line-height-h2:        1.20;
+$letter-spacing-h2:     -0.03em; // -3%
+
+// H3 — 32px / 120% line-height / -2% letter-spacing
+$font-size-h3:          32px;
+$line-height-h3:        1.20;
+$letter-spacing-h3:     -0.02em; // -2%
+
+// Button / Link — 17px / 100% line-height / -2% letter-spacing / Medium
+$font-size-btn:         17px;
+$line-height-btn:       1.00;
+$letter-spacing-btn:    -0.02em; // -2%
+
+// Paragraph (p) — 17px / auto line-height / -2% letter-spacing / Regular
+$font-size-p:           17px;
+$line-height-p:         1.5;
+$letter-spacing-p:      -0.02em; // -2%
+
+// Small (p2) — 15px / auto line-height / -2% letter-spacing / Regular
+$font-size-p2:          15px;
+$line-height-p2:        1.5;
+$letter-spacing-p2:     -0.02em; // -2%
+
+// ----------------------------------------------------------
+// TYPOGRAPHY - MOBILE SCALE (Satoshi)
+// ----------------------------------------------------------
+$font-size-h1-mobile:   34px;
+$line-height-h1-mobile: 1.00;
+$letter-spacing-h1-mobile: -0.06em; // -6%
+
+$font-size-h2-mobile:   34px;
+$line-height-h2-mobile: 1.00;
+$letter-spacing-h2-mobile: -0.06em;
+
+$font-size-h3-mobile:   34px;
+$line-height-h3-mobile: 1.00;
+$letter-spacing-h3-mobile: -0.06em;
+
+// ----------------------------------------------------------
+// GRID & LAYOUT
+// ----------------------------------------------------------
+$grid-columns:          12;
+$grid-col-width:        100px;
+$grid-gutter:           20px;
+$grid-container-width:  1420px; // 12 cols * 100px + 11 gutters * 20px
+$grid-outer-margin:     250px;  // (1920 - 1420) / 2 = 250px side margins on 1920 viewport
+
+// ----------------------------------------------------------
+// BORDER RADIUS
+// ----------------------------------------------------------
+$radius-btn:            100px;
+$radius-card:           20px;
+$radius-sm:             10px;
+
+// ----------------------------------------------------------
+// TRANSITIONS
+// ----------------------------------------------------------
+$transition-base:       all 0.25s ease;
+$transition-smooth:     all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ----------------------------------------------------------
+// BUTTON INTERACTION SCALE
+// ----------------------------------------------------------
+$btn-click-scale:       0.92;

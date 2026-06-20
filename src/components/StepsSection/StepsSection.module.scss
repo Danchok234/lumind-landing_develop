@@ -1,0 +1,195 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+// ── Section shell ───────────────────────────────────────────
+.steps {
+  width: 100%;
+  padding: 80px 20px 7.5rem 20px; // 120px top/bottom on desktop · 20px sides
+  background-color: $color-background;
+
+  @include bp-max(md){
+    padding: 0px 20px 7.5rem 20px;
+  }
+}
+
+// Centered content column (Figma desktop content width = 1420px)
+.inner {
+  width: 100%;
+  max-width: $grid-container-width; // 1420px
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.75rem; // 60px (desktop section gap, Figma "4. steps")
+
+  @include bp-max(md) {
+    gap: 2.5rem; // 40px (mobile section gap)
+  }
+}
+
+// ── Section title (mobile copy "We believe that simpler is easier") ──
+// Desktop H2 sizing, centered; shrinks to mobile 28px below md.
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h2; // 48px
+  line-height: $line-height-h2; // 1.2
+  letter-spacing: $letter-spacing-h2; // -3%
+  text-align: center;
+  color: $color-black;
+
+  .accent {
+    color: $color-purple;
+  }
+
+  @include bp-max(md) {
+    font-size: 28px; // mobile/h2
+  }
+}
+
+// ── Cards block: blurred backdrop + 20% white wash (Figma #350:323) ──
+.cards {
+  overflow: clip;
+  // Establish an isolated stacking context so the cards' `backdrop-filter`
+  // reliably samples THIS block's background (it can silently no-op inside a
+  // clipping parent that isn't its own stacking context).
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem; // 20px
+  padding: 3.75rem; // 60px
+  border-radius: 16px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+    url("/steps-cards-bg.png") center / cover no-repeat;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.02);
+
+  // Tablet/laptop: keep 3 cards across, shrink padding + gap.
+  @include bp-max(xl) {
+    gap: 1rem; // 16px
+    padding: 2.5rem; // 40px
+  }
+  @include bp-max(lg) {
+    gap: 0.75rem; // 12px
+    padding: 1.5rem; // 24px
+  }
+
+  // Mobile: stack into a single column (Figma #350:645).
+  @include bp-max(md) {
+    flex-direction: column;
+    gap: 0.625rem; // 10px
+    padding: 1.25rem; // 20px
+  }
+}
+
+// ── Step card: frosted glass panel ──────────────────────────
+// Desktop: 600px tall, number pinned top, text pinned bottom (space-between).
+.card {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.625rem; // 10px
+  height: 480px; // 600px block − 2×60px padding
+  padding: 3.75rem; // 60px
+  border-radius: 16px;
+  position: relative;
+  // ~0.6 white lets the blur read as actual frosted glass while the strong
+  // 24px blur keeps the backdrop soft enough for legible text.
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+
+  @include bp-max(xl) {
+    height: 400px; // shrunk a little for the narrower 3-up layout
+    padding: 2.5rem; // 40px
+  }
+  @include bp-max(lg) {
+    height: 360px; // shrunk further as the columns get narrower
+    padding: 1.5rem; // 24px
+  }
+
+  // Mobile: hug height, number above text with a generous gap (Figma 60px).
+  @include bp-max(md) {
+    height: auto;
+    justify-content: flex-start;
+    gap: 3.75rem; // 60px
+    padding: 1.25rem; // 20px
+  }
+}
+
+// Numbered badge — black pill, white digit (desktop/h4 24px).
+.badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 100px;
+  background-color: $color-black;
+  color: $color-white;
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+
+  @include bp-max(md) {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; // 16px (Figma desktop)
+
+  @include bp-max(md) {
+    gap: 0.75rem; // 12px
+  }
+}
+
+// Card title (desktop/h3 32px) → scales down on narrow columns.
+.cardTitle {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-black;
+
+  @include bp-max(xl) {
+    font-size: 28px;
+  }
+  @include bp-max(lg) {
+    font-size: 24px;
+  }
+  @include bp-max(md) {
+    font-size: 20px; // mobile/h3
+  }
+}
+
+// Card description (desktop/p 17px) → smaller on tablet, 12px on mobile.
+.cardDesc {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+
+  @include bp-max(lg) {
+    font-size: 15px;
+  }
+  @include bp-max(md) {
+    font-size: 12px; // mobile/small text
+    color: rgba(32, 32, 32, 0.5);
+  }
+}

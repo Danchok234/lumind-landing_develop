@@ -1,0 +1,94 @@
+// ============================================================
+// Button Component Styles
+// Figma UI Kit: Primary / Secondary / Disabled
+// ============================================================
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  min-width: 230px;
+  padding: 0 40px;
+  border-radius: $radius-btn;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: $transition-smooth;
+  @include text-btn;
+  text-align: center;
+  white-space: nowrap;
+  outline: none;
+  user-select: none;
+
+  // Light glow that follows cursor on hover (set via JS/CSS var)
+  &::after {
+    content: '';
+    position: absolute;
+    top: var(--glow-y, -63px);
+    left: var(--glow-x, calc(100% - 25px));
+    width: 136px;
+    height: 170px;
+    border-radius: 50%;
+    transform: rotate(30deg);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+
+  &:active {
+    transform: scale($btn-click-scale);
+  }
+
+  // ── PRIMARY ──────────────────────────────────────────────
+  &--primary {
+    background-color: $color-purple;
+    color: $color-white;
+
+    &::after {
+      background: radial-gradient(ellipse, rgba(255, 255, 255, 0.35) 0%, transparent 70%);
+    }
+
+    &:hover {
+      background-color: darken(#8355F8, 5%);
+      box-shadow: 0 4px 24px rgba(#8355F8, 0.35);
+    }
+  }
+
+  // ── SECONDARY ────────────────────────────────────────────
+  &--secondary {
+    background-color: transparent;
+    color: $color-black;
+    border: 1px solid $color-purple;
+
+    &::after {
+      background: radial-gradient(ellipse, rgba(#E6DCFF, 0.6) 0%, transparent 70%);
+    }
+
+    &:hover {
+      border-color: $color-light-purple;
+      box-shadow: 0 4px 20px rgba(#8355F8, 0.15);
+    }
+  }
+
+  // ── DISABLED ─────────────────────────────────────────────
+  &--disabled,
+  &:disabled {
+    background-color: $color-light-purple;
+    color: $color-white;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+
+    &::after {
+      display: none;
+    }
+  }
+}

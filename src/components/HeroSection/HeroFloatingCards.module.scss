@@ -1,0 +1,177 @@
+@use '@/styles/mixins' as *;
+
+// ── Both cards share this glass base ────────────────────────────
+// Figma: bg rgba(255,255,255,0.75) • backdrop-blur 8px
+//        border 1px rgba(255,255,255,0.7) • border-radius 10px
+//        size: 368 × 121px  →  23rem × 7.5625rem
+.card {
+  position: absolute;
+  width: 23rem;
+  height: 7.5625rem;
+
+  border-radius: 10px;
+border: 1px solid rgba(255, 255, 255, 0.70);
+background: rgba(255, 255, 255, 0.75);
+backdrop-filter: blur(8px);
+  // overflow:clip intentionally NOT here — it prevents backdrop-filter from compositing.
+  // The glow blob is clipped by .cardClip instead.
+
+  z-index: 10;
+
+  // Only show when viewport ≥ 1420px so the wrapper is at full max-width (1420px)
+  // and all percentage/calc positions match the Figma layout exactly.
+  // Below 1420px the wrapper shrinks and cards drift away from the photo cards.
+
+  @include bp-max(xl){
+    display:none;
+  }
+}
+
+// Separate clip layer for the glow blob only — keeps backdrop-filter working on .card
+.cardClip {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: clip;
+  pointer-events: none;
+}
+
+// ── Decorative dot grids ──────────────────────────────────────
+// Positioned relative to the floating cards (and moving with them)
+// Figma size: 500x500px, radial gradient mask
+.dots {
+  position: absolute;
+  width: 31.25rem;  // 500px
+  height: 31.25rem; // 500px
+  background-image: url('/debab767063c8a193d699a396e7a35ce877bf895.png');
+  background-position: center;
+  // The raw exported image is 3840px wide (2x retina), but Figma renders it at ~1890px wide.
+  // We must scale it down by setting background-size, which doubles the visible dot density.
+  background-size: 118.17rem auto; // 1890px
+  mask-image: radial-gradient(circle at center, black 0%, transparent 60%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 60%);
+  z-index: 0; // Behind photo cards and floating cards
+  pointer-events: none;
+
+  @include bp-max(xs) {
+    display: none;
+  }
+}
+
+// Left dots: dot group is 97px (6.0625rem) left of info card, 71px (4.4375rem) above it.
+// Card left is calc(50% - 39.4375rem) -> dots = calc(50% - 45.5rem)
+// Card top is 7.5rem -> dots = 3.0625rem
+.dotsLeft {
+  left: calc(50% - 45.5rem);
+  top: 3.0625rem;
+}
+
+// Right dots: dot group is 7px (0.4375rem) left of info card, 145px (9.0625rem) above it.
+// Card left is calc(50% + 14.6875rem) -> dots = calc(50% + 14.25rem)
+// Card top is 12.125rem -> dots = 3.0625rem
+.dotsRight {
+  left: calc(50% + 14.25rem);
+  top: 3.0625rem;
+}
+
+// ── Left card ────────────────────────────────────────────────
+// Figma (1920px frame): x=377, y=678
+// Wrapper center = 710px. 127px from wrapper left = center − 583px
+// y offset from photo card top (y=558): 678−558 = 120px = 7.5rem
+.cardLeft {
+  left: calc(50% - 39.4375rem);
+  top: 7.5rem;
+}
+
+// ── Right card ────────────────────────────────────────────────
+// Figma (1920px frame): x=1147, y=752
+// Wrapper center = 710px. 897px from wrapper left = center + 187px
+// y offset from photo card top: 752−558 = 194px = 12.125rem
+.cardRight {
+  left: calc(50% + 14.6875rem);
+  top: 12.125rem;
+}
+
+// ── White glow blob (left card only, top-right corner) ───────────
+// Figma: bg-white blur-[35px] right-[-1px] top-[-1px] size-[74px] rounded-[100px]
+.glowBlob {
+  position: absolute;
+  width: 4.625rem;  // 74px
+  height: 4.625rem; // 74px
+  right: -1px;
+  top: -1px;
+  border-radius: 100px;
+  background: #ffffff;
+  filter: blur(2.1875rem); // 35px
+  pointer-events: none;
+}
+
+// ── Header row (title + logo badge) ─────────────────────────────
+// Figma: left:15px top:15px w:336px h:58px gap:10px
+.header {
+  position: absolute;
+  display: flex;
+  gap: 0.625rem; // 10px
+  align-items: flex-start;
+  left: 0.9375rem;  // 15px
+  top: 0.9375rem;   // 15px
+  width: 21rem;     // 336px
+  height: 3.625rem; // 58px
+}
+
+.titleCol {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// ── Title text ────────────────────────────────────────────────────
+// Figma: Satoshi Medium 24px / 1.2 line-height / -0.48px tracking / #202020
+.title {
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 1.5rem;        // 24px
+  line-height: 1.2;
+  letter-spacing: -0.03em;  // -0.48px
+  color: #202020;
+  margin: 0;
+  word-break: break-word;
+}
+
+// ── Date / location text ──────────────────────────────────────────
+// Figma: Satoshi Regular 17px / normal / -0.34px / rgba(32,32,32,0.7)
+//        left:15px top:81px w:336px
+.date {
+  position: absolute;
+  font-family: var(--font-satoshi);
+  font-weight: 400;
+  font-size: 1.0625rem;     // 17px
+  line-height: normal;
+  letter-spacing: -0.02em;  // -0.34px
+  color: rgba(32, 32, 32, 0.7);
+  left: 0.9375rem;  // 15px
+  top: 5.0625rem;   // 81px
+  width: 21rem;     // 336px
+  margin: 0;
+  white-space: nowrap;
+}
+
+// ── Logo badge (circle with brand logo) ───────────────────────────
+// Figma: 48×48px, border-radius 100px
+.logoBadge {
+  position: relative;
+  flex-shrink: 0;
+  width: 3rem;   // 48px
+  height: 3rem;  // 48px
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.logoBadgeOrange {
+  background: #ef7f01;
+}
+
+.logoBadgeDark {
+  background: #202020;
+}

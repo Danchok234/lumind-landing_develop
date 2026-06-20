@@ -1,0 +1,515 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+// ── Section shell (full-bleed black) ────────────────────────
+.footer {
+  width: 100%;
+  background-color: $color-black;
+  padding: 7.5rem 20px 3.75rem; // 120px top · 60px bottom
+
+  @include bp-max(lg) {
+    padding: 5rem 20px 2.5rem;
+  }
+  @include bp-max(md) {
+    padding: 2.5rem 20px;
+  }
+}
+
+// Centered content column — Figma desktop content width is 1420px.
+.inner {
+  width: 100%;
+  max-width: 1420px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem; // 80px (form → footer-bottom)
+
+  @include bp-max(lg) {
+    gap: 3.75rem;
+  }
+  @include bp-max(md) {
+    gap: 2.5rem;
+  }
+}
+
+// ── Form card ───────────────────────────────────────────────
+.formCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem; // 40px
+  min-height: 37.8125rem; // 605px
+  padding-right: 3.75rem; // 60px (left flush for the collage)
+  background-color: $color-white;
+  border-radius: 16px;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.02);
+  overflow: hidden;
+
+  // Stacked (tablet + mobile): form on top, photos peeking below.
+  @include bp-max(lg) {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    min-height: 0;
+    padding: 1.25rem; // 20px
+  }
+}
+
+// ── Form column ─────────────────────────────────────────────
+.form {
+  flex: 1 1 31.25rem;
+  max-width: 31.25rem; // 500px
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem; // 40px
+  padding-block: 3.75rem; // breathing room inside the 605px card
+  z-index: 2;
+
+  @include bp-max(lg) {
+    flex: none;
+    width: 100%;
+    max-width: 28rem;
+    gap: 2rem;
+    padding-block: 0;
+    text-align: center;
+    align-items: stretch;
+  }
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; // 12px
+}
+
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h2; // 48px
+  line-height: $line-height-h2; // 1.2
+  letter-spacing: $letter-spacing-h2; // -3%
+  color: $color-black;
+
+  @include bp-max(xl) {
+    font-size: 40px;
+  }
+  @include bp-max(lg) {
+    font-size: 28px;
+  }
+}
+
+.accent {
+  color: $color-purple;
+}
+
+.subtitle {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p; // 17px
+  line-height: 1.4;
+  letter-spacing: $letter-spacing-p;
+  color: $color-black;
+  opacity: 0.5;
+
+  @include bp-max(lg) {
+    font-size: $font-size-p2; // 15px
+  }
+}
+
+// ── Sent / thank-you state ──────────────────────────────────
+.thankYou {
+  @include bp-max(lg) {
+    text-align: center;
+  }
+}
+
+// ── Fields ──────────────────────────────────────────────────
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; // 12px
+}
+
+.fieldWrap {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  height: 3.75rem; // 60px
+  padding: 0 1.25rem; // 0 20px
+  background-color: $color-background; // #F6F6F6
+  border: 1px solid transparent; // reserve space so :focus border doesn't shift layout
+  border-radius: $radius-btn; // 100px
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-btn; // 17px
+  line-height: 1;
+  letter-spacing: $letter-spacing-btn;
+  color: $color-black;
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: $color-black-250;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-black-250;
+  }
+
+  @include bp-max(lg) {
+    height: 3.125rem; // 50px
+    font-size: $font-size-p2; // 15px
+  }
+}
+
+.inputInvalid,
+.inputInvalid:focus {
+  border-color: $color-error;
+}
+
+// Floating "Incorrect filled field" tooltip near the bad field.
+.errorChip {
+  position: absolute;
+  top: 0;
+  right: 1.25rem;
+  transform: translateY(-50%);
+  padding: 0.5rem 1.25rem;
+  background-color: $color-error;
+  border-radius: 5px;
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: $letter-spacing-p2;
+  color: $color-white;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(255, 95, 95, 0.3);
+  z-index: 3;
+}
+
+// Submit button (shared Button component, stretched full-width).
+.submit {
+  width: 100%;
+  margin-top: 0.25rem;
+
+  @include bp-max(lg) {
+    height: 3.125rem; // 50px
+    min-width: 0;
+  }
+}
+
+.privacy {
+  padding-left: 1.25rem;
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p2; // 15px
+  line-height: 1.4;
+  letter-spacing: $letter-spacing-p2;
+  color: $color-black-250;
+
+  @include bp-max(lg) {
+    padding-left: 0;
+    text-align: center;
+  }
+}
+
+.privacyLink {
+  color: $color-black-250;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $color-purple;
+  }
+}
+
+// ── Decorative photo collage ────────────────────────────────
+// Two overlapping event photos. On desktop they fill the left half of the
+// card; on mobile they sit at the bottom. Either way the card's overflow
+// clips whatever spills past its edges (matching the Figma crop).
+.collage {
+  position: relative;
+  flex: 1 1 0;
+  align-self: stretch;
+  min-width: 0;
+  order: -1; // desktop: collage sits left of the form (form is first in DOM)
+
+  // Soft white glow behind the cards (Figma radial "pattern" ellipses).
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 10% 8%;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    pointer-events: none;
+  }
+
+  @include bp-max(lg) {
+    order: 0; // stacked: form stays on top, collage drops below
+    flex: none;
+    width: 100%;
+    height: 13rem; // visible strip; the tilted cards overflow + clip at the bottom
+    margin-top: 1.5rem;
+  }
+  @include bp-max(md) {
+    height: 12rem;
+  }
+}
+
+.photo {
+  width:330px;
+  height: 430px;
+  position: absolute;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    20px 20px 64px 12px rgba(21, 0, 72, 0.12),
+    inset 0 0 64px rgba(255, 255, 255, 0.5);
+
+  @include bp-max(xl){
+    width: 270px;
+    height:320px;
+  }
+
+  @include bp-max(lg) {
+    border-radius: 10px;
+    box-shadow:
+      10px 10px 28px 6px rgba(21, 0, 72, 0.12),
+      inset 0 0 26px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.photoImg {
+  object-fit: cover;
+}
+
+// Inset white gloss (kept above the image).
+.photoGloss {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 64px rgba(255, 255, 255, 0.5);
+
+  @include bp-max(lg) {
+    box-shadow: inset 0 0 26px rgba(255, 255, 255, 0.5);
+  }
+}
+
+// YouTube/stage photo (88aa) — lower-left, strongly tilted, sits in front and
+// clips at the card's bottom edge.
+.photoBack {
+  left: 15%;
+  top:50%;
+  aspect-ratio: 469 / 597;
+  transform:rotate(-41.858deg) skewX(-10deg);
+  z-index: 2;
+
+  @include bp-max(xl){
+    left:10%;
+    top:60%;
+  }
+
+  // Mobile: left card of the fanned pair, tilted counter-clockwise, on top.
+  @include bp-max(lg) {
+    left: calc(50% - 11.5rem);
+    top: 0.5rem;
+    width: 12.3rem;
+    height: auto;
+    transform: rotate(7deg) scaleY(0.97) skewX(14deg);
+  }
+  @media (max-width:520px){
+    width:9rem;
+    left: calc(50% - 9rem);
+    top:3rem;
+  }
+}
+
+// Chandelier/ballroom photo (147fcdc) — upper-centre, mildly tilted, sits
+// behind and clips at the card's top edge.
+.photoFront {
+  left: 50%;
+  top: -16%;
+  aspect-ratio: 406 / 586;
+  transform: rotate(30deg) skewX(10deg) scaleX(-1);
+  z-index: 3;
+
+  @include bp-max(xl){
+    left:30%;
+    top:-10%;
+  }
+
+  // Mobile: right card of the fanned pair, tilted clockwise, behind.
+  @include bp-max(lg) {
+    left: calc(50% - 0.5rem);
+    top: 0rem;
+    width: 12.5rem;
+    height: auto;
+    transform: rotate(-7deg) scaleY(0.97) skewX(-14deg);
+  }
+
+  @media (max-width:520px){
+    width:9rem;
+    left: calc(50% - 1rem);
+    top:2.5rem;
+  }
+}
+
+// ── Footer bottom ───────────────────────────────────────────
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 3.75rem; // 60px (nav row → copyright)
+
+  @include bp-max(md) {
+    gap: 2.5rem;
+    align-items: center;
+  }
+}
+
+.bottomMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2.5rem;
+
+  @include bp-max(md) {
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    width: 100%;
+  }
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+  max-width: 20.75rem; // 332px
+
+  @include bp-max(md) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.brandName {
+  font-family: $font-satoshi;
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1.2;
+  color: $color-white;
+}
+
+.brandTagline {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p; // 17px
+  line-height: 1.4;
+  letter-spacing: $letter-spacing-p;
+  color: $color-white-600;
+
+  @include bp-max(md) {
+    font-size: $font-size-p2; // 15px
+    opacity: 0.8;
+  }
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; // 40px
+  height: 2.5rem;
+  border-radius: $radius-btn;
+  background-color: rgba(255, 255, 255, 0.04);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+  }
+
+  img {
+    display: block;
+  }
+}
+
+// Two nav columns.
+.navGroup {
+  display: flex;
+  gap: 5rem; // 80px
+
+  @include bp-max(md) {
+    gap: 3.75rem; // 60px
+    justify-content: center;
+  }
+}
+
+.navCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+  list-style: none;
+
+  @include bp-max(md) {
+    gap: 1.25rem;
+  }
+}
+
+.navLink {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-btn; // 17px
+  line-height: 1;
+  letter-spacing: $letter-spacing-btn;
+  color: $color-white;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $color-light-purple;
+  }
+
+  @include bp-max(md) {
+    font-size: $font-size-p2; // 15px
+  }
+}
+
+.copyright {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p2; // 15px
+  line-height: 1.3;
+  letter-spacing: $letter-spacing-p2;
+  color: $color-white-600;
+  text-align: center;
+
+  @include bp-max(md) {
+    opacity: 0.6;
+  }
+}
+
+// ── Reduced motion ──────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .social,
+  .input,
+  .navLink,
+  .privacyLink {
+    transition: none;
+  }
+}

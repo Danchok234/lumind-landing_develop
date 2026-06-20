@@ -1,0 +1,307 @@
+@use '@/styles/mixins' as *;
+
+// ── Outer positioning wrapper (sticky + hide-on-scroll) ──
+.headerOuter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.25rem 1.25rem 0; // 20px top, 20px sides
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+}
+
+// ── The actual pill ──
+.header {
+  pointer-events: all;
+  background: var(--color-white);
+  border-radius: var(--radius-btn); // 100px pill shape
+  box-shadow: 0 0 0.5rem rgba(32, 32, 32, 0.06);
+  width: 100%;
+  max-width: var(--container-width); // 1420px
+  height: 4.625rem; // 74px
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.625rem; // 26px
+  position: relative;
+
+  @include bp-max(lg) {
+    height: 3.75rem; // 60px
+  }
+}
+
+// ── Logo ──
+.logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    height: 1.25rem; // 20px
+    width: auto;
+    display: block;
+  }
+}
+
+// ── Desktop nav (absolutely centered so it stays at 50% regardless of logo/actions widths) ──
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; // 40px
+
+  @include bp-max(xl) {
+    gap: 2rem; // 20px
+  }
+
+  @include bp-max(lg) {
+    display: none;
+  }
+}
+
+.navLink {
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 1.0625rem; // 17px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  white-space: nowrap;
+  padding-bottom: 0.125rem; // 2px
+
+  // Underline grows from center on hover
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -0.0625rem; // -1px
+    left: 50%;
+    right: 50%;
+    height: 0.0625rem; // 1px
+    background: var(--color-black);
+    transition: left 0.3s ease, right 0.3s ease;
+  }
+
+  &:hover::after,
+  &.active::after {
+    left: 0;
+    right: 0;
+  }
+}
+
+// ── Desktop right actions ──
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; // 40px
+  flex-shrink: 0;
+
+  @include bp-max(lg) {
+    display: none;
+  }
+}
+
+.actionLink {
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 1.0625rem; // 17px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  white-space: nowrap;
+  padding-bottom: 0.125rem; // 2px
+
+   &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    right: 50%;
+    height: 0.0625rem; // 1px
+    background: var(--color-black);
+    transition: left 0.3s ease, right 0.3s ease;
+  }
+
+  &:hover::after {
+    left: 0;
+    right: 0;
+  }
+
+  &.organizators {
+    color: var(--color-purple);
+    opacity: 0.8;
+
+    &::after {
+      background: var(--color-purple);
+    }
+  }
+
+  &.signIn {
+    color: var(--color-black);
+
+    &::after {
+      background: var(--color-black);
+    }
+  }
+}
+
+// ── Hamburger button (mobile only) ──
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3125rem; // 5px
+  width: 2.25rem;  // 36px — intentional icon touch target
+  height: 2.25rem; // 36px
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+
+  @include bp-max(lg) {
+    display: flex;
+  }
+
+  span {
+    display: block;
+    width: 1.375rem; // 22px
+    height: 0.125rem; // 2px
+    background: var(--color-black);
+    border-radius: 0.125rem; // 2px
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity   0.35s ease;
+    transform-origin: center;
+  }
+
+  // X state when open
+  &.open {
+    span:nth-child(1) {
+      transform: translateY(0.4375rem) rotate(45deg); // 7px
+    }
+    span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    span:nth-child(3) {
+      transform: translateY(-0.4375rem) rotate(-45deg); // -7px
+    }
+  }
+}
+
+// ── Mobile drawer (slides in from left, full-screen) ──
+.drawer {
+  position: fixed;
+  inset: 0;
+  background: var(--color-white);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // Top padding clears the fixed header pill; sides and bottom use consistent spacing
+  padding: 6.25rem 1.25rem 1.25rem; // 100px 20px 20px
+
+  // Slide in from left
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.3s ease;
+
+  &.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  @include bp(lg) {
+    display: none;
+  }
+}
+
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem; // 40px
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.drawerNavLink {
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 1.75rem; // 28px
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--color-black);
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+}
+
+.drawerActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem; // 10px
+  width: min(100%, 22.1875rem); // 355px max, fluid below
+  margin: 0 auto;
+}
+
+.drawerBtnPrimary {
+  width: 100%;
+  height: 3.125rem; // 50px
+  background: var(--color-purple);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 0.9375rem; // 15px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.drawerBtnSecondary {
+  width: 100%;
+  height: 3.125rem; // 50px
+  background: transparent;
+  color: var(--color-black);
+  border: 0.0625rem solid var(--color-purple); // 1px
+  border-radius: var(--radius-btn);
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 0.9375rem; // 15px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-purple) 5%, transparent);
+  }
+}

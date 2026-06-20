@@ -1,0 +1,573 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+// ── Section shell ───────────────────────────────────────────
+// 20px left/right padding on the section (matches the rest of the site).
+.advantages {
+  width: 100%;
+  padding: 7.5rem 20px; // 120px top/bottom on desktop
+  background-color: $color-background;
+
+  @include bp-max(xl) {
+    padding: 5rem 20px; // 80px top/bottom · 20px sides
+  }
+}
+
+// Centered content column (Figma desktop content width = 1420px)
+.inner {
+  width: 100%;
+  max-width: $grid-container-width; // 1420px
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.75rem; // 60px (desktop section gap)
+
+  @include bp-max(xl) {
+    gap: 2.5rem; // 40px (mobile section gap)
+  }
+}
+
+// ── Title (mobile copy, centered on every viewport) ─────────
+// Sticky so it stays visible through the whole card-stacking animation. It is
+// intentionally LOWER than the cards in the paint order (no z-index): during
+// stacking the title (~40–98px) and the cards (pinned at ≥140px) never overlap,
+// so the title is fully visible; then as the deck scrolls up past the top it
+// paints OVER the title and carries it off-screen — so the title never lingers
+// on top of a card or over the next section.
+.title {
+  position: sticky;
+  top: 2.5rem; // 40px
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h2; // 48px on desktop
+  line-height: $line-height-h2; // 1.2
+  letter-spacing: $letter-spacing-h2; // -3%
+  text-align: center;
+  color: $color-black;
+
+  .accent {
+    color: $color-purple;
+  }
+
+  // Fades out (driven by JS) the instant the last card has scrolled above the
+  // pinned title, so the title can't linger over the empty space / next section.
+
+  @include bp-max(md) {
+    top: 1.875rem; // 30px
+    font-size: 28px; // mobile/h2
+  }
+}
+
+.titleHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+// ── Cards: single full-width column that stacks on scroll ───
+// Each card is sticky; as you scroll they pin and pile into a deck, leaving a
+// small "peek" of each card above the next (Figma "cards animation on scroll"
+// → "final look", which stacks the 600px cards with a ~50px peek).
+.cards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem; // 40px (desktop cards gap)
+
+  // Trailing scroll room so the LAST card can travel up to its pinned position
+  // and the fully-stacked deck holds for a brief moment before scrolling away.
+  // (A sticky element only stays pinned while its container still has room
+  // below it — without this the last card never reaches the final state.)
+  // Kept SMALL on purpose: this room is empty space that sits before the next
+  // section, so a large value opens a big gap to the Steps section. Just enough
+  // for the last card to pin and briefly settle. (The sticky title no longer
+  // lingers through it — that's handled in JS, see `titleHidden` below.)
+
+  // Sticky offset of the first card + how much of each card peeks out.
+  // --stack-top sits the deck below the pinned title (which wraps to ~2 lines
+  // on tablet, so that range needs the most clearance).
+  --stack-top: 8.75rem; // 140px
+  --stack-peek: 3.125rem; // 50px (Figma final look)
+
+  @include bp-max(xl) {
+    --stack-top: 8.125rem; // 130px — title is still a single line through this range
+    --stack-peek: 2.75rem; // 44px
+  }
+  @include bp-max(lg) {
+    --stack-top: 10.625rem; // 170px — title wraps to 2 lines below ~1024px
+  }
+  @include bp-max(md) {
+    gap: 0.625rem; // 10px (mobile cards gap)
+    padding-bottom: 10vh;
+    --stack-top: 7.8125rem; // 125px
+    --stack-peek: 1.875rem; // 30px
+  }
+}
+
+// Staggered sticky offsets → the deck pins with each card slightly lower than
+// the one before, so the previous cards' top edges stay visible.
+.cards > .block:nth-child(1) {
+  top: var(--stack-top);
+}
+.cards > .block:nth-child(2) {
+  top: calc(var(--stack-top) + var(--stack-peek));
+}
+.cards > .block:nth-child(3) {
+  top: calc(var(--stack-top) + var(--stack-peek) * 2);
+}
+
+// Respect reduced-motion: fall back to a normal, non-stacking list (kept
+// position:relative so the decorative absolute layers stay anchored).
+@media (prefers-reduced-motion: reduce) {
+  .title {
+    position: static; // don't pin the title without the stacking animation
+  }
+  .cards {
+    padding-bottom: 0; // no trailing scroll room needed without the stacking
+  }
+  .cards > .block:nth-child(1),
+  .cards > .block:nth-child(2),
+  .cards > .block:nth-child(3) {
+    position: relative;
+    top: auto;
+  }
+}
+
+// ── Blocks (shared shell) ───────────────────────────────────
+// Desktop (Figma): full-width, 600px tall. Text header pinned to the top;
+// a decorative layer fills the lower area and is clipped by the block.
+.block {
+  position: sticky; // pins on scroll so the cards stack into a deck
+  overflow: hidden;
+  width: 100%;
+  height: 600px;
+  border-radius: 16px;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.02);
+
+  @include bp-max(xl) {
+    height: 520px;
+  }
+  @include bp-max(md) {
+    height: 400px;
+  }
+}
+
+// Block colour variants
+.blockPurple {
+  background-color: $color-purple;
+}
+
+.blockWhite {
+  background-color: $color-white;
+
+  // Dark text on the light background
+  .blockTitle {
+    color: $color-black;
+  }
+  .blockDesc {
+    color: $color-black-700;
+  }
+}
+
+.blockDark {
+  background-color: $color-black;
+
+  .blockTitle {
+    color: $color-white;
+  }
+  // This block's description is larger (Figma desktop/p override = 20px).
+  .blockDesc {
+    max-width: 35.0625rem; // 561px (Figma)
+    font-size: 20px;
+    color: $color-white-600;
+
+    @include bp-max(xl) {
+      max-width: 100%;
+    }
+
+    @include bp-max(md) {
+      font-size: $font-size-p2; // 15px (mobile/text)
+    }
+  }
+}
+
+// "space" — bold-italic emphasis inside the third block's title (Figma ts2).
+.emphasis {
+  font-style: italic;
+  font-weight: 800;
+}
+
+// Text header — row (title left · description right) on desktop.
+.blockHeader {
+  position: relative;
+  z-index: 1; // sits above the decorative pills
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem; // 40px
+  padding: 59px 60px 0; // top 59 · sides 60 (Figma)
+
+  // Stack on tablet/mobile (matches the mobile design's column layout).
+  @include bp-max(xl) {
+    flex-direction: column;
+    gap: 0.75rem; // 12px
+    padding: 40px 40px 0;
+  }
+  @include bp-max(md) {
+    gap: 0.625rem; // 10px
+    padding: 20px 20px 0;
+  }
+}
+
+.blockTitle {
+  flex: 0 1 auto;
+  max-width: 39.75rem; // 636px (Figma)
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h3; // 32px (desktop/h3)
+  line-height: $line-height-h3; // 1.2
+  letter-spacing: $letter-spacing-h3; // -2%
+  color: $color-white;
+
+  @include bp-max(xl) {
+    max-width: none;
+  }
+  @include bp-max(md) {
+    font-size: 20px; // mobile/h3
+  }
+}
+
+.blockDesc {
+  flex: 0 0 auto;
+  max-width: 31.25rem; // 500px (Figma)
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p; // 17px (desktop/p)
+  line-height: $line-height-p; // 1.5
+  letter-spacing: $letter-spacing-p; // -2%
+  color: $color-white-600;
+
+  @include bp-max(xl) {
+    max-width: none;
+  }
+  @include bp-max(md) {
+    font-size: $font-size-p2; // 15px (mobile/text)
+  }
+}
+
+// ── Decorative faded pills (background layer) ───────────────
+// Absolutely positioned so the fixed-height block clips the overflow exactly
+// like Figma. Slightly wider than the block on each side, starting below the
+// text header so the two never overlap.
+.pills {
+  position: absolute;
+  z-index: 0;
+  top: 206px; // Figma: pill block starts at y=206
+  left: -28px; // overflow each side (Figma container width 1476 vs 1420)
+  right: -28px;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px between rows
+  pointer-events: none;
+
+  @include bp-max(xl) {
+    top: 200px;
+  }
+  @include bp-max(md) {
+    top: 200px;
+    gap: 0.75rem; // 12px
+  }
+}
+
+.pillRow {
+  display: flex;
+  flex: 0 0 70px; // pill height 70px (Figma)
+  gap: 1.25rem; // 20px between pills
+
+  @include bp-max(md) {
+    flex-basis: 56px;
+    gap: 0.75rem;
+  }
+}
+
+.pill {
+  flex: 1 1 0;
+  border-radius: 562.5px; // full pill (Figma)
+  background-color: $color-white-250; // white @ 25%
+}
+
+// ── Second block: faded week calendar + floating event chips ─
+// Absolutely positioned layer; the fixed-height block clips the overflow.
+// Desktop (Figma #350:365): inset 80px sides, starts at y=206. Mobile
+// (#350:583): full width, anchored to the bottom of the 400px block.
+.calendar {
+  position: absolute;
+  z-index: 0;
+  top: 206px;
+  left: 80px;
+  right: 80px;
+  bottom: 0;
+  pointer-events: none;
+
+  @include bp-max(xl) {
+    top: 200px;
+    left: 40px;
+    right: 40px;
+  }
+  @include bp-max(md) {
+    top: auto;
+    left: 0;
+    right: 0;
+    height: 176px; // Figma mobile calendar height
+  }
+}
+
+// Seven day-columns with a faint vertical divider line each (whole grid @ 20%).
+.days {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  opacity: 0.2;
+}
+
+.day {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  // Mobile shows Mon–Fri only (Figma #350:584).
+  &:nth-child(6),
+  &:nth-child(7) {
+    @include bp-max(md) {
+      display: none;
+    }
+  }
+}
+
+.dayLabel {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.2;
+  color: $color-black;
+
+  @include bp-max(md) {
+    font-size: 12px; // mobile/small text
+  }
+}
+
+.dayLine {
+  flex: 1 1 auto;
+  width: 2px;
+  background-color: $color-black;
+  opacity: 0.25;
+}
+
+// Floating coloured event chips, positioned over the calendar.
+.events {
+  position: absolute;
+  inset: 0;
+}
+
+.event {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 562.5px; // full pill
+  white-space: nowrap;
+}
+
+.eventText {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p; // 17px (desktop/p)
+  line-height: 1;
+  letter-spacing: $letter-spacing-p;
+  color: rgba(32, 32, 32, 0.6); // black @ 60%
+
+  @include bp-max(md) {
+    font-size: $font-size-p2; // 15px (mobile/text)
+  }
+}
+
+.eventDot {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 1000px;
+  background-color: $color-white;
+}
+
+// Chip colours + positions (Figma: descending diagonal across the calendar).
+.eventYellow {
+  left: 5%;
+  top: 82px;
+  background-color: #ffe792;
+
+  @include bp-max(md) {
+    left: 50%;
+    top: 106px;
+  }
+}
+
+.eventGreen {
+  left: 37.9%;
+  top: 176px;
+  background-color: #c5ffc9;
+
+  @include bp-max(md) {
+    display: none; // not present in the mobile design
+  }
+}
+
+.eventPurple {
+  left: 70.9%;
+  top: 270px;
+  background-color: #d6c5ff;
+
+  @include bp-max(md) {
+    left: -28%; // overflows the left edge (Figma x:-100)
+    top: 36px;
+  }
+}
+
+// ── Third block: faded stack of Safari-style browser windows ─
+// Centered column; the front window fills the rest of the block and is clipped
+// at the bottom. Back windows are narrower + more transparent (Figma #350:405).
+// Sizes are driven by custom properties so the whole stack scales per viewport.
+.windowStack {
+  position: absolute;
+  z-index: 0;
+  top: 206px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+
+  --toolbar-h: 53px;
+  --dot: 12px;
+  --radius: 16px;
+  --pad: 20px;
+  --h1: 60px; // back window 1 height
+  --h2: 70px; // back window 2 height
+  --front-h: 360px; // front window height (intentionally taller than needed → clipped)
+
+  @include bp-max(xl) {
+    top: 200px;
+    left: 40px;
+    right: 40px;
+    --toolbar-h: 40px;
+    --dot: 9px;
+    --pad: 16px;
+    --h1: 46px;
+    --h2: 54px;
+    --front-h: 300px;
+  }
+  // Mobile: anchor to the bottom of the 400px block (Figma #350:606).
+  @include bp-max(md) {
+    top: auto;
+    bottom: 0;
+    left: 30;
+    right: 30;
+    --toolbar-h: 13px;
+    --dot: 3px;
+    --radius: 6px;
+    --pad: 6px;
+    --h1: 15px;
+    --h2: 17px;
+    --front-h: 152px;
+  }
+}
+
+.window {
+  background-color: $color-white;
+  border: 1px solid rgba(158, 158, 158, 0.35); // #9E9E9E, faint
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: 0 0 20.74px 5.53px rgba(32, 32, 32, 0.1);
+  overflow: hidden;
+}
+
+.windowBack1 {
+  flex: 0 0 auto;
+  width: 88%; // 1144 / 1300
+  height: var(--h1);
+  opacity: 0.3;
+}
+
+.windowBack2 {
+  flex: 0 0 auto;
+  width: 94%; // 1222 / 1300
+  height: var(--h2);
+  opacity: 0.4;
+}
+
+// Definite height so the body resolves without depending on flex-grow; any
+// excess overflows the block bottom and is clipped.
+.windowFront {
+  flex: 0 0 auto;
+  width: 100%;
+  height: var(--front-h);
+  display: flex;
+  flex-direction: column;
+}
+
+.windowBar {
+  flex: 0 0 auto;
+  height: var(--toolbar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--pad);
+  padding-inline: var(--pad);
+  background-color: #fdfdfd;
+}
+
+.windowBody {
+  flex: 1 1 auto;
+  min-height: 0;
+  background-color: $color-white;
+}
+
+// Traffic-light controls (left of the toolbar)
+.traffic {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--dot) * 0.66);
+
+  i {
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+  }
+}
+.trafficRed {
+  background-color: #ff5f57;
+}
+.trafficYellow {
+  background-color: #febc2e;
+}
+.trafficGreen {
+  background-color: #28c840;
+}
+
+// Faint tool icons (right of the toolbar)
+.barTools {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--dot) * 0.66);
+  margin-left: auto;
+
+  i {
+    width: calc(var(--dot) * 1.4);
+    height: var(--dot);
+    border-radius: calc(var(--dot) * 0.33);
+    background-color: rgba(158, 158, 158, 0.35);
+  }
+}

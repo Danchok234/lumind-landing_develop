@@ -1,0 +1,232 @@
+@use '@/styles/mixins' as *;
+
+// ── Wrapper with glow ─────────────────────────────────────────
+// The glow sits above the pill on desktop, so we need relative
+// positioning on the outer wrapper to anchor it.
+.searchWrapper {
+  position: relative;
+  width: 100%;
+  padding: 0 20px; // wrapper parent already provides 20px padding
+  margin-top: 3.75rem;
+  z-index: 5;
+
+  // Purple shadow — pixel-perfect from Figma:
+  //   fill: #8355F8 • opacity: 0.4 • filter: blur(35px)
+  //   Placed here (on the wrapper) so the pill at z-index:1 naturally
+  //   sits on top of it — no stacking-context collision.
+  &::after {
+    content: '';
+    position: absolute;
+    // Figma: shadow element top=1009, pill top=976 → 33px offset from pill top
+    // Pill padding-top is 0.75rem, so from wrapper top: 0.75rem + 1.3125rem = 2.0625rem
+    top: 2.0625rem;
+    left: -4.93%;
+    right: -4.93%;
+    height: 4.375rem;        // 70px — matches Figma shadow height
+    background: var(--color-purple);
+    opacity: 0.4;
+    filter: blur(2.1875rem); // 35px
+    border-radius: 50%;      // elliptical for radial spread
+    pointer-events: none;
+    z-index: 0;              // pill is z-index:1, so pill always on top
+  }
+
+  @include bp-max(lg) {
+    margin-top: 2.5rem;
+    padding: 0 1.25rem;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+// ── Desktop pill ──────────────────────────────────────────────
+.pill {
+  position: relative;
+  z-index: 1;              // sits above the wrapper's ::after glow
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;        // 12px
+  background: var(--color-white);
+  border-radius: var(--radius-btn);
+  border-bottom: 0.0625rem solid rgba(131, 85, 248, 0.2);
+  box-shadow: 0 0 0.5rem rgba(32, 32, 32, 0.02);
+
+  @include bp-max(lg) {
+    display: none;
+  }
+}
+
+// ── Fields flex container (isolates :last-child from .searchBtn) ─
+.fields {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+// ── Individual filter field inside the pill ───────────────────
+.field {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 3.75rem; // 60px
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 2.5rem; // 10px 40px
+  // Only a right-side divider; reset all other button borders
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: 0.0625rem solid var(--color-light-purple);
+  background: none;
+  cursor: pointer;
+
+  // Language is now genuinely :last-child inside .fields
+  &:last-child {
+    border-right: none;
+  }
+
+  &:hover .fieldLabel {
+    color: var(--color-black);
+  }
+}
+
+.fieldLabel {
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 1.0625rem; // 17px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--color-black);
+  transition: color 0.2s ease;
+
+  &.muted {
+    color: rgba(32, 32, 32, 0.7);
+  }
+}
+
+.fieldIcon {
+  flex-shrink: 0;
+  width: 1.5rem;  // 24px
+  height: 1.5rem; // 24px
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img, svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+// ── Search CTA button ─────────────────────────────────────────
+.searchBtn {
+  flex-shrink: 0;
+  height: 3.75rem;  // 60px
+  width: 14.375rem; // 230px
+  background: var(--color-purple);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 1.0625rem; // 17px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    opacity: 0.92;
+    box-shadow: 0 0 1.5rem rgba(131, 85, 248, 0.45);
+  }
+
+  // Mobile version is smaller
+  &.searchBtnMobile {
+    height: 3.125rem;   // 50px
+    width: 100%;
+    font-size: 0.9375rem; // 15px
+  }
+}
+
+// ── Mobile card ───────────────────────────────────────────────
+.mobileCard {
+  display: none;
+
+  @include bp-max(lg) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem; // 10px
+    width: 100%;
+    background: var(--color-white);
+    border: 0.0625rem solid var(--color-light-purple);
+    border-radius: 1rem; // 16px
+    padding: 1.25rem;    // 20px
+    box-shadow: 0 0 0.5rem rgba(32, 32, 32, 0.02);
+  }
+}
+
+.mobileRow {
+  display: flex;
+  gap: 0.625rem; // 10px
+  align-items: center;
+  width: 100%;
+}
+
+// ── Shared mobile filter pill ─────────────────────────────────
+.mobileField {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 3.125rem; // 50px
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 1.25rem; // 10px 20px
+  background: var(--color-background);
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+}
+
+.mobileFieldLabel {
+  font-family: var(--font-satoshi);
+  font-weight: 500;
+  font-size: 0.9375rem; // 15px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+  white-space: nowrap;
+}
+
+.mobileIconBtn {
+  flex-shrink: 0;
+  width: 3.125rem;  // 50px
+  height: 3.125rem; // 50px
+  background: var(--color-background);
+  border-radius: var(--radius-btn);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+.calendarIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}

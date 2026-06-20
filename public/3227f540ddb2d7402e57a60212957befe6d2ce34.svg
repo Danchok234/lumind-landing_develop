@@ -1,0 +1,21 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 12.1616 2.80652" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Window Controls" clip-path="url(#clip0_2131_469)">
+<g id="Close">
+<circle cx="1.40311" cy="1.40303" r="1.40326" fill="var(--fill-0, #ED6A5E)"/>
+<circle cx="1.40311" cy="1.40303" r="1.28632" stroke="var(--stroke-0, black)" stroke-opacity="0.1" stroke-width="0.233876"/>
+</g>
+<g id="Minimize">
+<circle cx="6.08099" cy="1.40326" r="1.40326" fill="var(--fill-0, #F4BD50)"/>
+<circle cx="6.08099" cy="1.40326" r="1.28632" stroke="var(--stroke-0, black)" stroke-opacity="0.1" stroke-width="0.233876"/>
+</g>
+<g id="Zoom">
+<circle cx="10.7587" cy="1.40326" r="1.40326" fill="var(--fill-0, #61C454)"/>
+<circle cx="10.7587" cy="1.40326" r="1.28632" stroke="var(--stroke-0, black)" stroke-opacity="0.1" stroke-width="0.233876"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_2131_469">
+<rect width="12.1616" height="2.80652" fill="white"/>
+</clipPath>
+</defs>
+</svg>
