@@ -1,0 +1,221 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.benefits {
+  width: 100%;
+  padding: 7.5rem 20px; // 120px top/bottom on desktop
+  background-color: $color-background;
+
+  @include bp-max(xl) {
+    padding: 5rem 20px; // 80px top/bottom · 20px sides
+  }
+}
+
+.inner {
+  width: 100%;
+  max-width: $grid-container-width;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.75rem; // 60px
+
+  @include bp-max(xl) {
+    gap: 2.5rem; // 40px
+  }
+}
+
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h2; // 48px
+  line-height: $line-height-h2;
+  letter-spacing: $letter-spacing-h2;
+  text-align: center;
+  color: $color-black;
+
+  .accent {
+    color: $color-purple;
+    font-style: italic;
+  }
+
+  @include bp-max(md) {
+    font-size: 28px;
+  }
+}
+
+// ── Benefit cards ─────────────────────────────────────────────
+.cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem; // 20px
+
+  @include bp-max(lg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background-color: $color-white;
+  border-radius: 16px;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.02);
+  padding: 2.5rem; // 40px
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; // 12px
+
+  @include bp-max(md) {
+    padding: 1.5rem;
+  }
+}
+
+.cardTitle {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.5rem; // 24px
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-black;
+}
+
+.cardDesc {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p2; // 15px
+  line-height: 1.5;
+  letter-spacing: $letter-spacing-p2;
+  color: $color-black-700;
+}
+
+// ── CTA banner ─────────────────────────────────────────────────
+.cta {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background-color: $color-black;
+  border-radius: 16px;
+  padding: 3.75rem; // 60px
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.875rem; // 30px
+
+  @include bp-max(md) {
+    padding: 2rem 1.5rem;
+    gap: 1.25rem;
+  }
+}
+
+// Decorative dot textures fading from opposite corners of the CTA block.
+.ctaDots {
+  position: absolute;
+  z-index: 0;
+  width: 28.125rem; // 450px
+  height: 28.125rem;
+  background-image: url('/60f96925f39c046f557a0bef03661012f8ef2526.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.12;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, rgba(0, 0, 0, 0) 70%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 0%, rgba(0, 0, 0, 0) 70%);
+
+  @include bp-max(md) {
+    width: 18rem;
+    height: 18rem;
+  }
+}
+
+.ctaDotsTopLeft {
+  top: -8rem;
+  left: -8rem;
+}
+
+.ctaDotsBottomRight {
+  bottom: -8rem;
+  right: -8rem;
+}
+
+.ctaTitle {
+  position: relative;
+  z-index: 1;
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h3; // 32px
+  line-height: $line-height-h3;
+  letter-spacing: $letter-spacing-h3;
+  color: $color-white;
+  max-width: 40rem;
+
+  @include bp-max(md) {
+    font-size: 20px;
+  }
+}
+
+.ctaForm {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 34.875rem; // 558px (Figma)
+  display: flex;
+  gap: 0.625rem; // 10px
+  background-color: $color-white;
+  border-radius: $radius-sm;
+  padding: 0.3125rem; // 5px
+
+  @include bp-max(md) {
+    border-radius: 1rem;
+  }
+  @include bp-max(sm) {
+    flex-direction: column;
+  }
+}
+
+.ctaInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0 1.25rem;
+  font-family: $font-satoshi;
+  font-size: $font-size-p; // 17px
+  letter-spacing: $letter-spacing-p;
+  color: $color-black;
+
+  &::placeholder {
+    color: $color-black-700;
+  }
+  @include bp-max(sm){
+    padding: 15px 20px;
+    border-radius: 100px;
+    border: 1px solid #D4D4D4;
+    ;
+  }
+}
+
+.ctaButton {
+  flex: 0 0 auto;
+}
+
+.ctaHint {
+  position: relative;
+  z-index: 1;
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p2; // 15px
+  letter-spacing: $letter-spacing-p2;
+  color: $color-white-600;
+}
+
+.ctaSuccess {
+  position: relative;
+  z-index: 1;
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-p; // 17px
+  letter-spacing: $letter-spacing-p;
+  color: $color-white;
+}

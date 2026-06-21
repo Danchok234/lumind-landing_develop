@@ -1,0 +1,109 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.hero {
+  display: flex;
+  position: relative;
+  width: 100%; // clears the fixed header pill
+  flex-direction: column;
+  overflow: hidden;
+  background-color: $color-black;
+  padding: 10.875rem 20px 5.5rem 20px;
+
+  @include bp-max(md) {
+    padding: 7.375rem 20px 3rem 20px;
+  }
+}
+
+// ── Decorative dot textures (four corners) ───────────────────
+.dots {
+  position: absolute;
+  width: 31.25rem; // 500px
+  height: 31.25rem;
+  background-image: url('/60f96925f39c046f557a0bef03661012f8ef2526.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, rgba(0, 0, 0, 0) 70%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.dotsTopLeft {
+  top: -10rem;
+  left: -10rem;
+}
+
+.dotsTopRight {
+  top: -10rem;
+  right: -10rem;
+}
+
+.dotsBottomLeft {
+  bottom: -10rem;
+  left: -10rem;
+}
+
+.dotsBottomRight {
+  bottom: -10rem;
+  right: -10rem;
+}
+
+// ── Text block ──────────────────────────────────────────────
+.textBlock {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.875rem; // 30px
+
+  @include bp-max(md) {
+    gap: 1.25rem;
+  }
+}
+
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: $font-size-h1; // 96px
+  line-height: $line-height-h1;
+  letter-spacing: $letter-spacing-h1;
+  color: $color-white;
+  max-width: 63.875rem; // 1022px (Figma)
+
+  @include bp-max(xl) {
+    font-size: 4.5rem; // 72px
+    max-width: 48rem;
+  }
+
+  @include bp-max(lg) {
+    font-size: 3.5rem;
+    max-width: 70%;
+  }
+
+  @include bp-max(md) {
+    font-size: 3.25rem; // 52px
+    max-width: 100%;
+  }
+
+  @include bp-max(xs) {
+    font-size: 2.75rem;
+  }
+}
+
+.subtitle {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: $font-size-p; // 17px
+  line-height: 1.5;
+  letter-spacing: $letter-spacing-p;
+  color: $color-white-600;
+  max-width: 38rem; // 608px (Figma)
+
+  @include bp-max(md) {
+    font-size: $font-size-p2; // 15px
+    max-width: 90%;
+  }
+}

@@ -138,12 +138,12 @@ export default function Header() {
 
           {/* Desktop right actions */}
           <div className={styles.actions}>
-            <a
-              href="#organizators"
+            <Link
+              href="/organizers"
               className={`${styles.actionLink} ${styles.organizators}`}
             >
               For organizators
-            </a>
+            </Link>
             <a
               href="#sign-in"
               className={`${styles.actionLink} ${styles.signIn}`}
@@ -189,9 +189,13 @@ export default function Header() {
 
         {/* Bottom buttons */}
         <div className={styles.drawerActions}>
-          <button className={styles.drawerBtnPrimary} onClick={closeMenu}>
+          <Link
+            href="/organizers"
+            className={styles.drawerBtnPrimary}
+            onClick={closeMenu}
+          >
             For organisators
-          </button>
+          </Link>
           <button className={styles.drawerBtnSecondary} onClick={closeMenu}>
             Sign in
           </button>

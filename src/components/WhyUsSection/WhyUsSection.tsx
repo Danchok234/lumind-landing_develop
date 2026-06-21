@@ -1,10 +1,15 @@
+'use client';
+
 import styles from './WhyUsSection.module.scss';
 import Button from '../Button/Button';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 // ── 0% decorative icon (Figma MCP export) ───────────────────
 const IMG_ZERO_PERCENT = '/why-us-zero-percent.svg';
 
 export default function WhyUsSection() {
+  const { ref, revealed } = useScrollReveal<HTMLDivElement>();
+
   return (
     <section className={styles.whyUs} aria-label="Why us">
       <div className={styles.inner}>
@@ -21,7 +26,7 @@ export default function WhyUsSection() {
         </header>
 
         {/* ── Cards: grid on desktop, flex on mobile/tablet ── */}
-        <div className={styles.cards}>
+        <div ref={ref} className={`${styles.cards} ${revealed ? styles.revealed : ''}`}>
         {/* Purple block */}
           <article className={styles.block}>
             <div className={styles.blockText}>

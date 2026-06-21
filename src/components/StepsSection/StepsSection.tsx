@@ -1,4 +1,16 @@
+'use client';
+
 import styles from './StepsSection.module.scss';
+import { useScrollProgress } from '@/hooks/useScrollProgress';
+
+// Each card gets an equal slice of the cards row's reveal progress (0→1) to
+// animate in. A small gap between slices keeps reveals from overlapping.
+const SLICE = 1 / 3;
+const cardProgress = (progress: number, index: number) => {
+  const start = index * SLICE;
+  const local = (progress - start) / (SLICE * 0.8);
+  return Math.min(1, Math.max(0, local));
+};
 
 // Three steps — copy taken from the DESKTOP design (Figma #350:321), kept
 // identical across every viewport. The mobile design (#350:643, mislabeled
@@ -22,6 +34,11 @@ const STEPS = [
 ];
 
 export default function StepsSection() {
+  // Title is untouched (no animation) so it holds still. The cards row's
+  // visibility ratio drives each card in, one by one, as it scrolls into
+  // view — reversible, no scroll listeners, no artificial tall sections.
+  const { ref, progress } = useScrollProgress<HTMLDivElement>();
+
   return (
     <section className={styles.steps} aria-label="How it works">
       <div className={styles.inner}>
@@ -32,16 +49,23 @@ export default function StepsSection() {
         </h2>
 
         {/* ── Cards: glassmorphism row over a blurred backdrop ── */}
-        <div className={styles.cards}>
-          {STEPS.map((step) => (
-            <article key={step.n} className={styles.card}>
-              <span className={styles.badge}>{step.n}</span>
-              <div className={styles.cardText}>
-                <h3 className={styles.cardTitle}>{step.title}</h3>
-                <p className={styles.cardDesc}>{step.desc}</p>
-              </div>
-            </article>
-          ))}
+        <div ref={ref} className={styles.cards}>
+          {STEPS.map((step, i) => {
+            const p = cardProgress(progress, i);
+            return (
+              <article
+                key={step.n}
+                className={styles.card}
+                style={{ opacity: p, transform: `translateY(${(1 - p) * 40}px)` }}
+              >
+                <span className={styles.badge}>{step.n}</span>
+                <div className={styles.cardText}>
+                  <h3 className={styles.cardTitle}>{step.title}</h3>
+                  <p className={styles.cardDesc}>{step.desc}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -51,7 +51,7 @@ export default function HeroFloatingCards() {
       <div className={`${styles.card} ${styles.cardRight}`}>
         <div className={styles.header}>
           <div className={styles.titleCol}>
-            <p className={styles.title}>UX/UI desig annual meeting</p>
+            <p className={styles.title}>UX/UI design annual meeting</p>
           </div>
           {/* Dark badge — logo at h=20.83%, l=7.75%, t=39.58%, w=84.49% of 48×48 */}
           <div className={`${styles.logoBadge} ${styles.logoBadgeDark}`}>
