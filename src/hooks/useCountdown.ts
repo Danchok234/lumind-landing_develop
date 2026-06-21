@@ -35,6 +35,7 @@ export function useCountdown(offsetHours: number): Countdown {
 
   useEffect(() => {
     const t = Date.now() + offsetHours * 3600 * 1000;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTarget(t);
     setNow(Date.now());
 

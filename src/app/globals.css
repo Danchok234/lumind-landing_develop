@@ -75,6 +75,14 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Belt-and-suspenders alongside body's overflow-x below: some browsers treat
+     <html>, not <body>, as the real viewport scroller, so clip it here too.
+     Must be `clip`, not `hidden` — `hidden` turns html into a real scroll
+     container, which in Chrome changes the containing block for
+     `position: fixed` elements to html's scrollbar-shrunk client box instead
+     of the true viewport, leaving a permanent blank strip on the right equal
+     to the scrollbar width. */
+  overflow-x: clip;
 }
 
 body {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import CategoryMegaMenu from '@/components/CategoryMegaMenu';
 import styles from './Header.module.scss';
 
@@ -74,7 +75,7 @@ export default function Header() {
         <div className={styles.header}>
 
           {/* Logo */}
-          <a href="/" className={styles.logo} aria-label="Lumind home">
+          <Link href="/" className={styles.logo} aria-label="Lumind home">
             <Image
               src={LOGO_SRC}
               alt="Lumind.space"
@@ -82,7 +83,7 @@ export default function Header() {
               height={21}
               priority
             />
-          </a>
+          </Link>
 
           {/* Desktop center nav */}
           <nav className={styles.nav} aria-label="Site sections">
@@ -123,10 +124,17 @@ export default function Header() {
             )}
           </nav>
 
-          {/* Desktop categories mega-menu (anchored under the header pill) */}
-          <div onMouseEnter={openMega} onMouseLeave={closeMega}>
-            <CategoryMegaMenu open={megaOpen} onNavigate={() => setMegaOpen(false)} />
-          </div>
+          {/* Desktop categories mega-menu — a direct child of .header so it's
+              explicitly sized/placed by the header (width:100% of it). Its
+              root is position:absolute, so flexbox excludes it from
+              .header's `justify-content: space-between` row automatically;
+              it does not disturb the logo/nav/actions layout. */}
+          <CategoryMegaMenu
+            open={megaOpen}
+            onNavigate={() => setMegaOpen(false)}
+            onMouseEnter={openMega}
+            onMouseLeave={closeMega}
+          />
 
           {/* Desktop right actions */}
           <div className={styles.actions}>

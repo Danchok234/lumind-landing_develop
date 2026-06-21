@@ -1,0 +1,47 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; // 8px — slightly tighter than the main CategoryPills
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.25rem; // room so focus rings aren't clipped
+
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.pill {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: inline-flex;
+  align-items: center;
+  height: 2.25rem; // 36px — one notch smaller than the main pills
+  padding: 0 1rem;
+  border-radius: $radius-btn;
+  border: 0.0625rem solid $color-black-100;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+
+  @include text-btn;
+  font-size: 0.875rem; // 14px
+  color: $color-black-700;
+  transition: $transition-base;
+
+  &:hover {
+    border-color: $color-light-purple;
+    color: $color-black;
+  }
+
+  &.active {
+    background: $color-light-purple;
+    border-color: $color-purple;
+    color: $color-black;
+  }
+}

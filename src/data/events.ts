@@ -19,6 +19,8 @@ export interface Event {
   id: string;
   title: string;
   category: string;
+  /** Sub-category within `category`, e.g. "Web Development" under "Programming". */
+  subcategory: string;
   /** Optional highlight badge shown over the image (e.g. "Student free"). */
   tag?: EventTag;
   image: string;
@@ -52,6 +54,12 @@ export const IMAGES = [
   '/2dba98f9629e9672ffed9fe7ac1cec393b012438.png', // annual meeting
 ];
 
+interface SubcategoryDef {
+  name: string;
+  /** URL-safe identifier, unique within the parent category, e.g. "web-development". */
+  slug: string;
+}
+
 interface CategoryDef {
   category: string;
   /** URL-safe identifier, e.g. "ux-ui-design". */
@@ -59,6 +67,8 @@ interface CategoryDef {
   /** Accent colour used by the pill bar, mega-menu and category hero. */
   accent: string;
   titles: string[];
+  /** Sub-categories nested under this category, paired 1:1 with `titles` by index. */
+  subcategories: SubcategoryDef[];
 }
 
 const CATEGORIES: CategoryDef[] = [
@@ -73,6 +83,13 @@ const CATEGORIES: CategoryDef[] = [
       'Open source contributors day',
       'Cloud-native developers meetup',
     ],
+    subcategories: [
+      { name: 'Web Development', slug: 'web-development' },
+      { name: 'Mobile Development', slug: 'mobile-development' },
+      { name: 'AI & Machine Learning', slug: 'ai-machine-learning' },
+      { name: 'DevOps & Cloud', slug: 'devops-cloud' },
+      { name: 'Game Development', slug: 'game-development' },
+    ],
   },
   {
     category: 'UX/UI Design',
@@ -84,6 +101,13 @@ const CATEGORIES: CategoryDef[] = [
       'Product design portfolio review',
       'Figma power-user workshop',
       'Accessibility in design forum',
+    ],
+    subcategories: [
+      { name: 'Product Design', slug: 'product-design' },
+      { name: 'Graphic Design', slug: 'graphic-design' },
+      { name: 'Design Systems', slug: 'design-systems' },
+      { name: 'Motion Design', slug: 'motion-design' },
+      { name: 'UX Research', slug: 'ux-research' },
     ],
   },
   {
@@ -97,6 +121,13 @@ const CATEGORIES: CategoryDef[] = [
       'Social media trends 2026',
       'Performance marketing summit',
     ],
+    subcategories: [
+      { name: 'Digital Marketing', slug: 'digital-marketing' },
+      { name: 'Content Marketing', slug: 'content-marketing' },
+      { name: 'SEO & Analytics', slug: 'seo-analytics' },
+      { name: 'Social Media', slug: 'social-media' },
+      { name: 'Branding', slug: 'branding' },
+    ],
   },
   {
     category: 'Business',
@@ -108,6 +139,13 @@ const CATEGORIES: CategoryDef[] = [
       'Leadership training for students',
       'Scaling teams roundtable',
       'Future of work conference',
+    ],
+    subcategories: [
+      { name: 'Entrepreneurship', slug: 'entrepreneurship' },
+      { name: 'Finance & Investing', slug: 'finance-investing' },
+      { name: 'Leadership', slug: 'leadership' },
+      { name: 'Sales', slug: 'sales' },
+      { name: 'Operations', slug: 'operations' },
     ],
   },
   {
@@ -121,6 +159,13 @@ const CATEGORIES: CategoryDef[] = [
       'Songwriting camp weekend',
       'City jazz festival',
     ],
+    subcategories: [
+      { name: 'Live Performance', slug: 'live-performance' },
+      { name: 'Music Production', slug: 'music-production' },
+      { name: 'Songwriting', slug: 'songwriting' },
+      { name: 'DJing', slug: 'djing' },
+      { name: 'Music Business', slug: 'music-business' },
+    ],
   },
   {
     category: 'Photography',
@@ -132,6 +177,13 @@ const CATEGORIES: CategoryDef[] = [
       'Documentary photo summit',
       'Editing & color grading lab',
       'Travel photography retreat',
+    ],
+    subcategories: [
+      { name: 'Street Photography', slug: 'street-photography' },
+      { name: 'Portrait Photography', slug: 'portrait-photography' },
+      { name: 'Documentary Photography', slug: 'documentary-photography' },
+      { name: 'Photo Editing', slug: 'photo-editing' },
+      { name: 'Travel Photography', slug: 'travel-photography' },
     ],
   },
 ];
@@ -165,7 +217,7 @@ const MONTH_INDEX: Record<string, number> = {
 };
 const DURATIONS = ['2 hours', 'Half day', '1 day', '2 days', '3 days', '4 days', '1 week'];
 /** Audience levels, exposed for the filter "Level" field. */
-export const LEVELS = ['All levels', 'Beginner', 'Intermediate', 'Advanced'];
+export const LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
 const PRICES = [0, 15, 20, 30, 45, 60, 90, 120];
 
 /** Attendance formats, exposed for the search/filter "Format" field. */
@@ -201,7 +253,9 @@ function buildEvents(count: number): Event[] {
 
   for (let i = 0; i < count; i++) {
     const catDef = CATEGORIES[i % CATEGORIES.length];
-    const title = catDef.titles[Math.floor(i / CATEGORIES.length) % catDef.titles.length];
+    const titleIndex = Math.floor(i / CATEGORIES.length) % catDef.titles.length;
+    const title = catDef.titles[titleIndex];
+    const subcategory = catDef.subcategories[titleIndex % catDef.subcategories.length].name;
 
     const weekday = pick(WEEKDAYS, i * 3 + 1);
     const day = ((i * 7 + 3) % 28) + 1;
@@ -218,6 +272,7 @@ function buildEvents(count: number): Event[] {
       id: `evt-${pad(i + 1)}`,
       title,
       category: catDef.category,
+      subcategory,
       tag,
       image: pick(IMAGES, i),
       organizer: pick(ORGANIZERS, i * 2 + 1),
@@ -249,13 +304,21 @@ export const EVENTS: Event[] = buildEvents(60);
 /** Distinct categories, handy for the "popular categories" chips. */
 export const CATEGORY_NAMES: string[] = CATEGORIES.map((c) => c.category);
 
+/** Public, presentation-ready sub-category metadata for pills / mega-menu. */
+export interface SubcategoryMeta {
+  name: string;
+  slug: string;
+  /** How many seeded events fall in this sub-category. */
+  count: number;
+}
+
 /** Public, presentation-ready category metadata for pills / mega-menu / hero. */
 export interface CategoryMeta {
   category: string;
   slug: string;
   accent: string;
-  /** A few representative event titles, used by the mega-menu preview column. */
-  sampleTitles: string[];
+  /** Sub-categories nested under this category, e.g. "Web Development" under "Programming". */
+  subcategories: SubcategoryMeta[];
   /** How many seeded events fall in this category. */
   count: number;
 }
@@ -264,7 +327,11 @@ export const CATEGORIES_META: CategoryMeta[] = CATEGORIES.map((c) => ({
   category: c.category,
   slug: c.slug,
   accent: c.accent,
-  sampleTitles: c.titles.slice(0, 5),
+  subcategories: c.subcategories.map((s) => ({
+    name: s.name,
+    slug: s.slug,
+    count: EVENTS.filter((e) => e.category === c.category && e.subcategory === s.name).length,
+  })),
   count: EVENTS.filter((e) => e.category === c.category).length,
 }));
 
@@ -273,9 +340,26 @@ export function categorySlug(name: string): string {
   return CATEGORIES.find((c) => c.category === name)?.slug ?? '';
 }
 
+/** The URL slug for a sub-category name within its parent category. */
+export function subcategorySlug(categoryName: string, subcategoryName: string): string {
+  const cat = CATEGORIES.find((c) => c.category === categoryName);
+  return cat?.subcategories.find((s) => s.name === subcategoryName)?.slug ?? '';
+}
+
 /** Resolve a category by its URL slug; undefined if the slug is unknown. */
 export function getCategoryBySlug(slug: string): CategoryMeta | undefined {
   return CATEGORIES_META.find((c) => c.slug === slug);
+}
+
+/** Resolve a sub-category by its parent category slug + its own slug. */
+export function getSubcategoryBySlug(
+  categorySlugValue: string,
+  subcategorySlugValue: string,
+): { category: CategoryMeta; subcategory: SubcategoryMeta } | undefined {
+  const category = getCategoryBySlug(categorySlugValue);
+  const subcategory = category?.subcategories.find((s) => s.slug === subcategorySlugValue);
+  if (!category || !subcategory) return undefined;
+  return { category, subcategory };
 }
 
 /** How many cards are visible before the user clicks "Load more". */
@@ -302,6 +386,8 @@ export const SORT_LABELS: Record<SortOption, string> = {
 export interface EventFilters {
   /** Category name (not slug). On category pages this is locked by the route. */
   category?: string;
+  /** Sub-category name (not slug). On sub-category pages this is locked by the route. */
+  subcategory?: string;
   location?: string;
   format?: EventFormat;
   language?: string;
@@ -317,6 +403,7 @@ export interface EventFilters {
 export function filterEvents(events: Event[], f: EventFilters): Event[] {
   return events.filter((e) => {
     if (f.category && e.category !== f.category) return false;
+    if (f.subcategory && e.subcategory !== f.subcategory) return false;
     if (f.location && e.location !== f.location) return false;
     if (f.format && e.format !== f.format) return false;
     if (f.language && e.language !== f.language) return false;

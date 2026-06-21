@@ -1,5 +1,4 @@
 @use '@/styles/variables' as *;
-@use '@/styles/mixins' as *;
 
 .root {
   position: relative;
@@ -9,8 +8,10 @@
   position: absolute;
   top: calc(100% + 0.625rem); // 10px below the trigger
   left: 0;
-  z-index: 60;
-  min-width: 100%;
+  z-index: 110; // above the header pill (100) and mobile drawer (99)
+  max-width: calc(100vw - 2.5rem);
+  max-height: min(28rem, 70vh);
+  overflow-y: auto;
   background: $color-white;
   border: 0.0625rem solid $color-black-100;
   border-radius: $radius-card;

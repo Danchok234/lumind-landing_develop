@@ -246,6 +246,10 @@
 // ── Date-range calendar (react-day-picker) ────────────────────
 .calendarWrap {
   padding: 0.5rem 0.75rem 0.75rem;
+  // The sheet (see Popover) can be narrower than the calendar's default
+  // size — let the grid shrink to fit instead of forcing the sheet wider.
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .calendar {
@@ -258,6 +262,12 @@
   margin: 0;
   font-family: var(--font-satoshi);
   font-size: 0.9375rem; // 15px
+
+  // Smaller cells so the 7-column grid comfortably fits a phone-width sheet.
+  @include bp-max(sm) {
+    --rdp-cell-size: 2.375rem; // 38px (default is larger)
+    font-size: 0.875rem;
+  }
 }
 
 .calendarClear {

@@ -20,6 +20,9 @@ interface PopoverProps {
   openOnHover?: boolean;
   className?: string;
   panelClassName?: string;
+  /** Fires whenever the open state changes — lets a parent (e.g. SearchBar)
+   *  lock page scroll while any of its popovers are open. */
+  onOpenChange?: (open: boolean) => void;
 }
 
 /**
@@ -34,6 +37,7 @@ export default function Popover({
   openOnHover = false,
   className = '',
   panelClassName = '',
+  onOpenChange,
 }: PopoverProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -43,6 +47,10 @@ export default function Popover({
     close: () => setOpen(false),
     toggle: () => setOpen((v) => !v),
   };
+
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
 
   useEffect(() => {
     if (!open) return;

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Popover from '@/components/Popover';
 import SelectList, { type SelectOption } from '@/components/SelectList';
 import {
@@ -30,6 +31,15 @@ function CloseIcon() {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
       strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="m6 9 6 6 6-6" />
     </svg>
   );
 }
@@ -104,7 +114,7 @@ export default function FilterToolbar() {
         >
           {() => (
             <div className={styles.panelInner}>
-              <FilterGroup title="Format">
+              <FilterGroup title="Format" value={query.format}>
                 <SelectList
                   options={toOptions(FORMATS)}
                   value={query.format}
@@ -112,7 +122,7 @@ export default function FilterToolbar() {
                   onSelect={(v) => setFilters({ format: v as EventFormat | undefined })}
                 />
               </FilterGroup>
-              <FilterGroup title="Language">
+              <FilterGroup title="Language" value={query.language}>
                 <SelectList
                   options={toOptions(LANGUAGES)}
                   value={query.language}
@@ -120,7 +130,7 @@ export default function FilterToolbar() {
                   onSelect={(v) => setFilters({ language: v })}
                 />
               </FilterGroup>
-              <FilterGroup title="Level">
+              <FilterGroup title="Level" value={query.level}>
                 <SelectList
                   options={toOptions(LEVELS)}
                   value={query.level}
@@ -128,7 +138,10 @@ export default function FilterToolbar() {
                   onSelect={(v) => setFilters({ level: v })}
                 />
               </FilterGroup>
-              <FilterGroup title="Price">
+              <FilterGroup
+                title="Price"
+                value={PRICE_OPTIONS.find((o) => o.value === String(query.priceMax))?.label}
+              >
                 <SelectList
                   options={PRICE_OPTIONS}
                   value={query.priceMax != null ? String(query.priceMax) : undefined}
@@ -158,7 +171,7 @@ export default function FilterToolbar() {
               onClick={toggle}
               aria-expanded={open}
             >
-              {sortLabel}
+              <span className={styles.sortLabel}>{sortLabel}</span>
               <FilterIcon />
             </button>
           )}
@@ -197,11 +210,33 @@ export default function FilterToolbar() {
   );
 }
 
-function FilterGroup({ title, children }: { title: string; children: React.ReactNode }) {
+interface FilterGroupProps {
+  title: string;
+  /** Currently selected option's label, shown next to the title when collapsed. */
+  value?: string;
+  children: React.ReactNode;
+}
+
+// Collapsed by default so Format/Language/Level/Price don't all dump their
+// full option lists into the panel at once — open one to see its options.
+function FilterGroup({ title, value, children }: FilterGroupProps) {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className={styles.group}>
-      <span className={styles.groupTitle}>{title}</span>
-      {children}
+      <button
+        type="button"
+        className={styles.groupHeader}
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        <span className={styles.groupTitle}>{title}</span>
+        {value && !open && <span className={styles.groupValue}>{value}</span>}
+        <span className={`${styles.groupChevron} ${open ? styles.groupChevronOpen : ''}`}>
+          <ChevronDownIcon />
+        </span>
+      </button>
+      {open && <div className={styles.groupBody}>{children}</div>}
     </div>
   );
 }

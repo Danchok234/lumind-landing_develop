@@ -10,6 +10,11 @@
 .topRow {
   display: flex;
   align-items: center;
+  // Wrap as a safety net: the Filter button, "Clear all" and the Sort
+  // dropdown together don't fit one line on narrow phones, and none of them
+  // can shrink — without this the row (and the whole page) gets pushed
+  // wider than the viewport, causing horizontal scroll.
+  flex-wrap: wrap;
   gap: 1.25rem;
 
   @include bp-max(sm) {
@@ -73,21 +78,42 @@
 // ── Sort sits at the far right ───────────────────────────────
 .sortWrap {
   margin-left: auto;
+
+  // Once wrapped to its own line, drop the auto margin (which would just
+  // shove it to the right of an otherwise-empty line) and go full-width.
+  @include bp-max(md) {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
 .sortBtn {
   justify-content: space-between;
   min-width: 21.25rem; // 340px (Figma)
+  max-width: 100%;
 
   @include bp-max(md) {
     min-width: 0;
+    width: 100%;
   }
 
   // Sort icon mirrors the filter icon but flipped for a "sort" feel.
   svg {
     transform: scaleY(-1);
     opacity: 0.6;
+    flex-shrink: 0;
   }
+}
+
+// Truncate instead of overflowing on narrow phones where the longest sort
+// label ("Sort by price (low to high)") wouldn't otherwise fit.
+.sortLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .clearAll {
@@ -112,9 +138,9 @@
   max-width: calc(100vw - 2.5rem);
 }
 
+// Scrolling lives on the shared Popover `.panel` (Popover.module.scss) —
+// no max-height/overflow here, or the panel ends up with two scrollbars.
 .panelInner {
-  max-height: 70vh;
-  overflow-y: auto;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -123,11 +149,25 @@
 .group {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.75rem 0.5rem;
 
   & + & {
     border-top: 0.0625rem solid $color-black-100;
+  }
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover .groupTitle {
+    color: $color-black;
   }
 }
 
@@ -136,6 +176,40 @@
   @include text-p2;
   font-weight: 500;
   color: $color-black-250;
+  transition: color 0.15s ease;
+}
+
+.groupValue {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @include text-p2;
+  color: $color-black;
+  text-align: right;
+}
+
+.groupChevron {
+  flex-shrink: 0;
+  margin-left: auto;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: $color-black-250;
+  transition: transform 0.2s ease;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.groupChevronOpen {
+  transform: rotate(180deg);
+}
+
+.groupBody {
+  padding: 0 0.5rem 0.75rem;
 }
 
 .sortPanel {

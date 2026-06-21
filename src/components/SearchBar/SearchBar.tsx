@@ -1,7 +1,7 @@
 'use client';
 
 import 'react-day-picker/style.css';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { DayPicker, type DateRange } from 'react-day-picker';
 import Popover from '@/components/Popover';
@@ -92,6 +92,22 @@ export default function SearchBar({ variant = 'hero' }: SearchBarProps) {
   const [navDraft, setNavDraft] = useState<Draft>({});
   const current = isPage ? queryDraft : navDraft;
 
+  // Lock page scroll while any of this search bar's popovers (location,
+  // dates, format, language) are open. Counted rather than boolean since
+  // closing one field can briefly overlap with another opening.
+  const [openPopovers, setOpenPopovers] = useState(0);
+  const handlePopoverOpenChange = (open: boolean) => {
+    setOpenPopovers((count) => Math.max(0, count + (open ? 1 : -1)));
+  };
+  useEffect(() => {
+    // `document.scrollingElement` is `<html>` here (standards mode), not
+    // `<body>` — locking overflow on body alone doesn't stop page scroll.
+    document.documentElement.style.overflow = openPopovers > 0 ? 'hidden' : '';
+    return () => {
+      document.documentElement.style.overflow = '';
+    };
+  }, [openPopovers]);
+
   const update = (partial: Draft) => {
     if (isPage) {
       setFilters(partial);
@@ -133,6 +149,7 @@ export default function SearchBar({ variant = 'hero' }: SearchBarProps) {
       value={current.location}
       placeholder="Location"
       icon={<ChevronIcon />}
+      onOpenChange={handlePopoverOpenChange}
     >
       {({ close }) => (
         <SelectList
@@ -154,6 +171,7 @@ export default function SearchBar({ variant = 'hero' }: SearchBarProps) {
       value={dateLabel(current.from, current.to) || undefined}
       placeholder="Dates"
       icon={<CalendarIcon />}
+      onOpenChange={handlePopoverOpenChange}
     >
       {() => (
         <div className={styles.calendarWrap}>
@@ -184,6 +202,7 @@ export default function SearchBar({ variant = 'hero' }: SearchBarProps) {
       value={current.format}
       placeholder="Format"
       icon={<ChevronIcon />}
+      onOpenChange={handlePopoverOpenChange}
     >
       {({ close }) => (
         <SelectList
@@ -205,6 +224,7 @@ export default function SearchBar({ variant = 'hero' }: SearchBarProps) {
       value={current.language}
       placeholder="Language"
       icon={<ChevronIcon />}
+      onOpenChange={handlePopoverOpenChange}
     >
       {({ close }) => (
         <SelectList
@@ -266,14 +286,23 @@ interface FieldPopoverProps {
   placeholder: string;
   icon: ReactNode;
   align?: 'start' | 'end';
+  onOpenChange?: (open: boolean) => void;
   children: (helpers: { close: () => void }) => ReactNode;
 }
 
-function FieldPopover({ value, placeholder, icon, align = 'start', children }: FieldPopoverProps) {
+function FieldPopover({
+  value,
+  placeholder,
+  icon,
+  align = 'start',
+  onOpenChange,
+  children,
+}: FieldPopoverProps) {
   return (
     <Popover
       className={styles.fieldRoot}
       align={align}
+      onOpenChange={onOpenChange}
       trigger={({ toggle, open }) => (
         <button
           type="button"

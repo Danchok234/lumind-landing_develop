@@ -69,7 +69,10 @@
   }
 }
 
-// Wraps the "Events" trigger so it sits inline in the nav like any other link.
+// Wraps the "Events" trigger so it sits inline in the nav like any other
+// link. (CategoryMegaMenu itself renders as a separate, direct child of
+// .header — see Header.tsx — so its position:absolute root is excluded
+// from .header's flex layout rather than relying on nesting for that.)
 .megaWrap {
   display: inline-flex;
   align-items: center;
