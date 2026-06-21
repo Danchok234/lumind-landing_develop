@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import CategoryMegaMenu from '@/components/CategoryMegaMenu';
 import styles from './Header.module.scss';
 
 const LOGO_SRC = '/22848b279413d10b17754c4fecc14d8e107c0815.svg';
 
 const NAV_LINKS = [
-  { label: 'Events',         href: '#events' },
+  { label: 'Events',         href: '/event' },
   { label: 'Why us',         href: '#why-us' },
   { label: 'Our advantages', href: '#advantages' },
   { label: 'Steps',          href: '#steps' },
@@ -18,6 +19,7 @@ const NAV_LINKS = [
 export default function Header() {
   const [hidden, setHidden]     = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
   const [active, setActive]     = useState('');
   const lastScrollY             = useRef(0);
 
@@ -45,6 +47,20 @@ export default function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  // Mega-menu open/close with a short close delay so moving the pointer across
+  // the gap between the "Events" link and the panel doesn't dismiss it.
+  const megaCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openMega = () => {
+    if (megaCloseTimer.current) clearTimeout(megaCloseTimer.current);
+    setMegaOpen(true);
+  };
+  const closeMega = () => {
+    megaCloseTimer.current = setTimeout(() => setMegaOpen(false), 120);
+  };
+  useEffect(() => () => {
+    if (megaCloseTimer.current) clearTimeout(megaCloseTimer.current);
+  }, []);
+
   return (
     <>
       {/* ── Fixed header pill ── */}
@@ -70,20 +86,47 @@ export default function Header() {
 
           {/* Desktop center nav */}
           <nav className={styles.nav} aria-label="Site sections">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={[
-                  styles.navLink,
-                  active === link.href ? styles.active : '',
-                ].join(' ')}
-                onClick={() => setActive(link.href)}
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) =>
+              link.label === 'Events' ? (
+                <span
+                  key={link.href}
+                  className={styles.megaWrap}
+                  onMouseEnter={openMega}
+                  onMouseLeave={closeMega}
+                >
+                  <a
+                    href={link.href}
+                    className={[
+                      styles.navLink,
+                      active === link.href ? styles.active : '',
+                    ].join(' ')}
+                    aria-haspopup="true"
+                    aria-expanded={megaOpen}
+                    onClick={() => setActive(link.href)}
+                  >
+                    {link.label}
+                  </a>
+                </span>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={[
+                    styles.navLink,
+                    active === link.href ? styles.active : '',
+                  ].join(' ')}
+                  onClick={() => setActive(link.href)}
+                >
+                  {link.label}
+                </a>
+              ),
+            )}
           </nav>
+
+          {/* Desktop categories mega-menu (anchored under the header pill) */}
+          <div onMouseEnter={openMega} onMouseLeave={closeMega}>
+            <CategoryMegaMenu open={megaOpen} onNavigate={() => setMegaOpen(false)} />
+          </div>
 
           {/* Desktop right actions */}
           <div className={styles.actions}>

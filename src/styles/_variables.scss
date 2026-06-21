@@ -108,7 +108,7 @@ $letter-spacing-h3-mobile: -0.06em;
 $grid-columns:          12;
 $grid-col-width:        100px;
 $grid-gutter:           20px;
-$grid-container-width:  1420px; // 12 cols * 100px + 11 gutters * 20px
+$grid-container-width:  1600px; // TEMP: bumped 1420px -> 1600px for review. Undo: restore 1420px.
 $grid-outer-margin:     250px;  // (1920 - 1420) / 2 = 250px side margins on 1920 viewport
 
 // ----------------------------------------------------------

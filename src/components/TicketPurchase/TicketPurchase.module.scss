@@ -1,0 +1,328 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.section {
+  width: 100%;
+  padding: 3.75rem 1.25rem; // 60px
+  scroll-margin-top: 8rem; // so #tickets anchor clears the fixed header
+
+  @include bp-max(md) {
+    padding: 2.5rem 1.25rem;
+  }
+}
+
+// ── Heading ───────────────────────────────────────────────────
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 38rem;
+  margin-bottom: 2.5rem;
+}
+
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 3rem; // 48px
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: $color-black;
+
+  @include bp-max(md) {
+    font-size: 2.125rem;
+  }
+}
+
+.subtitle {
+  font-family: $font-satoshi;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}
+
+// ── Card ──────────────────────────────────────────────────────
+.card {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  background: $color-white;
+  border: 1px solid $color-black-100;
+  border-radius: $radius-card;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.06);
+  overflow: hidden;
+
+  @include bp-max(lg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Left column: details ──────────────────────────────────────
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 2.5rem; // 40px
+
+  @include bp-max(md) {
+    padding: 1.75rem;
+  }
+}
+
+.eventName {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 2rem; // 32px (h3)
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-black;
+
+  @include bp-max(md) {
+    font-size: 1.5rem;
+  }
+}
+
+.metaList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  list-style: none;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: $font-satoshi;
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}
+
+.icon {
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+  color: $color-purple;
+}
+
+.included {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid $color-black-100;
+}
+
+.includedTitle {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: $color-black;
+}
+
+.includedList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.includedItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: $font-satoshi;
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}
+
+.checkIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: $color-purple;
+}
+
+// ── Right column: purchase panel ──────────────────────────────
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem; // 40px
+  background: $color-background;
+  border-left: 1px solid $color-black-100;
+
+  @include bp-max(lg) {
+    border-left: none;
+    border-top: 1px solid $color-black-100;
+  }
+
+  @include bp-max(md) {
+    padding: 1.75rem;
+  }
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.priceLabel {
+  font-family: $font-satoshi;
+  font-size: 0.9375rem;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.from {
+  font-family: $font-satoshi;
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}
+
+.priceValue {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 3rem; // 48px
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: $color-black;
+
+  @include bp-max(md) {
+    font-size: 2.5rem;
+  }
+}
+
+// ── Countdown ─────────────────────────────────────────────────
+.countdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.countdownLabel {
+  font-family: $font-satoshi;
+  font-size: 0.9375rem;
+  letter-spacing: -0.02em;
+  color: $color-error;
+}
+
+.timer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.25rem;
+  background: $color-white;
+  border: 1px solid $color-black-100;
+  border-radius: $radius-sm;
+}
+
+.unitValue {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.5rem; // 24px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: $color-black;
+  font-variant-numeric: tabular-nums;
+}
+
+.unitLabel {
+  font-family: $font-satoshi;
+  font-size: 0.8125rem; // 13px
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}
+
+.buy {
+  width: 100%;
+}
+
+.secure {
+  font-family: $font-satoshi;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: $color-black-250;
+  text-align: center;
+}
+
+// ── Perks / notices ───────────────────────────────────────────
+.perks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.perk {
+  display: flex;
+  gap: 0.875rem;
+  padding: 1.25rem;
+  border-radius: $radius-sm;
+}
+
+.perk_purple {
+  background: $color-light-purple;
+  .perkIcon {
+    color: $color-purple;
+  }
+}
+
+.perk_green {
+  background: #e3f8ea;
+  .perkIcon {
+    color: #1aa157;
+  }
+}
+
+.perk_orange {
+  background: #ffeacf;
+  .perkIcon {
+    color: #c8780c;
+  }
+}
+
+.perkIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.perkCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.perkTitle {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: $color-black;
+}
+
+.perkText {
+  font-family: $font-satoshi;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}

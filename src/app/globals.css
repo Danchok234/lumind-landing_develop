@@ -46,7 +46,8 @@
   --font-poppins:  'Poppins', sans-serif;
 
   /* Grid */
-  --container-width: 1420px;
+  /* TEMP: bumped 1420px -> 1600px for review. Undo: restore 1420px. */
+  --container-width: 1600px;
 
   /* Radius */
   --radius-btn:   100px;

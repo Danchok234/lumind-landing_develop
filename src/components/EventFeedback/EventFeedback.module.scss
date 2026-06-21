@@ -1,0 +1,210 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.section {
+  width: 100%;
+  padding: 5rem 1.25rem; // 80px
+
+  @include bp-max(md) {
+    padding: 3.5rem 1.25rem;
+  }
+}
+
+// ── Heading row ───────────────────────────────────────────────
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 3.75rem; // 60px
+
+  @include bp-max(md) {
+    margin-bottom: 2rem;
+  }
+}
+
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 3rem; // 48px
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: $color-black;
+
+  @include bp-max(md) {
+    font-size: 2.125rem; // 34px
+  }
+}
+
+.brand {
+  white-space: nowrap;
+}
+
+.arrows {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.arrow {
+  width: 2.75rem; // 44px
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-purple;
+  color: $color-white;
+  border: none;
+  border-radius: $radius-btn;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover {
+    background: #6f43e0;
+    transform: scale(1.06);
+  }
+
+  &:active {
+    transform: scale($btn-click-scale);
+  }
+}
+
+// ── Carousel ──────────────────────────────────────────────────
+.viewport {
+  display: flex;
+  gap: 1.25rem; // 20px
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  // Fade the cards as they leave the viewport edges.
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+
+  // Hide scrollbar — navigation is via arrows/dots.
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include bp-max(sm) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+.card {
+  scroll-snap-align: center;
+  flex: 0 0 calc((100% - 2.5rem) / 3); // 3 across on desktop
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2.5rem; // 40px
+  background: $color-white;
+  border-radius: $radius-card;
+  box-shadow: 0 0 16px 2px rgba(32, 32, 32, 0.06);
+
+  @include bp-max(xl) {
+    flex-basis: calc((100% - 1.25rem) / 2); // 2 across
+  }
+
+  @include bp-max(md) {
+    flex-basis: 100%; // 1 across
+    padding: 1.75rem;
+  }
+}
+
+.cardTop {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.name {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.0625rem; // 17px
+  letter-spacing: -0.02em;
+  color: #1c1c1c;
+}
+
+.role {
+  font-family: $font-satoshi;
+  font-size: 0.9375rem; // 15px
+  letter-spacing: -0.02em;
+  color: rgba(28, 28, 28, 0.6);
+}
+
+.text {
+  font-family: $font-satoshi;
+  font-size: 1.0625rem; // 17px
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: rgba(28, 28, 28, 0.8);
+}
+
+.divider {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: $color-black-100;
+}
+
+.eventLabel {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.0625rem; // 17px
+  letter-spacing: -0.02em;
+  color: #1c1c1c;
+}
+
+// ── Pagination dots ───────────────────────────────────────────
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2.5rem; // 40px
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: $color-black-100;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover {
+    background: $color-black-250;
+  }
+}
+
+.dotActive {
+  width: 1.5rem;
+  background: $color-purple;
+
+  &:hover {
+    background: $color-purple;
+  }
+}

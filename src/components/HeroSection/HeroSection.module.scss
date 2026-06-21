@@ -4,7 +4,9 @@
   width: 100%;
   padding-top: 10.875rem;
   padding-bottom: 5.5rem;
-  overflow: hidden;
+  // No overflow:hidden here — it would clip the SearchBar's absolutely
+  // positioned dropdown panels. Horizontal overflow is already contained
+  // by `overflow-x: clip` on <body> (globals.css).
 
   background:
     linear-gradient(180deg, rgba(204, 184, 255, 0.18) 0%, rgba(246, 246, 246, 0) 55%),

@@ -1,0 +1,43 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  max-height: 17.5rem;
+  overflow-y: auto;
+}
+
+.option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border: none;
+  background: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+
+  @include text-p2;
+  color: $color-black-700;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: $color-background;
+    color: $color-black;
+  }
+
+  &.active {
+    background: $color-light-purple;
+    color: $color-black;
+    font-weight: 500;
+  }
+}

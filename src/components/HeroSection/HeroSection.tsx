@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import styles from './HeroSection.module.scss';
 import SearchBar from '@/components/SearchBar';
@@ -56,7 +57,9 @@ export default function HeroSection() {
           <HeroFloatingCards />
         </div>
 
-        <SearchBar />
+        <Suspense fallback={null}>
+          <SearchBar />
+        </Suspense>
       </div>
     </section>
   );

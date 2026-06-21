@@ -69,6 +69,12 @@
   }
 }
 
+// Wraps the "Events" trigger so it sits inline in the nav like any other link.
+.megaWrap {
+  display: inline-flex;
+  align-items: center;
+}
+
 .navLink {
   font-family: var(--font-satoshi);
   font-weight: 500;

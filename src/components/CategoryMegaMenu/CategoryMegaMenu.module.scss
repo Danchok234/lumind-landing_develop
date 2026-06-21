@@ -1,0 +1,135 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+// Anchored to the header pill (its nearest positioned ancestor). top:100%
+// touches the pill so there's no hover gap; padding-top gives breathing room.
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  padding-top: 0.625rem;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.5rem);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: 1fr auto 1.1fr;
+  gap: 2.5rem;
+  padding: 2.5rem;
+  background: $color-white;
+  border: 0.0625rem solid $color-black-100;
+  border-radius: $radius-card;
+  box-shadow: 0 1.5rem 3rem rgba(32, 32, 32, 0.16);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.colTitle {
+  padding-bottom: 1.25rem;
+  border-bottom: 0.0625rem solid $color-black-100;
+  @include text-btn;
+  color: $color-black-250;
+}
+
+.divider {
+  width: 0.0625rem;
+  background: $color-black-100;
+}
+
+// ── Left: category rows ──────────────────────────────────────
+.catList,
+.sampleList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.catRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: $radius-card;
+  transition: $transition-base;
+}
+
+.catActive {
+  background: $color-light-purple;
+  box-shadow: 0 0 1rem 0.125rem rgba(32, 32, 32, 0.06);
+}
+
+.catIcon {
+  flex-shrink: 0;
+  width: 2.5rem;  // 40px
+  height: 2.5rem;
+  border-radius: 50%;
+}
+
+.catName {
+  flex: 1;
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.5rem; // 24px (Figma h4)
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-black;
+}
+
+.chevron {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: $color-black-250;
+  flex-shrink: 0;
+}
+
+// ── Right: preview list ──────────────────────────────────────
+.sampleLink {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.5rem; // 24px
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $color-purple;
+  }
+}
+
+.viewAll {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-black-250;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $color-purple;
+  }
+}

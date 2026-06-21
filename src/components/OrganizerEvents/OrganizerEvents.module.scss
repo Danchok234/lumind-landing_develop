@@ -1,0 +1,55 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.section {
+  width: 100%;
+  padding: 3.75rem 1.25rem; // 60px
+
+  @include bp-max(md) {
+    padding: 2.5rem 1.25rem;
+  }
+}
+
+.heading {
+  margin-bottom: 2.5rem; // 40px
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 3rem; // 48px
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: $color-black;
+
+  @include bp-max(md) {
+    margin-bottom: 1.5rem;
+    font-size: 2.125rem; // 34px
+  }
+}
+
+.brand {
+  color: $color-purple;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem; // 20px
+
+  @include bp-max(xl) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include bp-max(md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seeMore {
+  display: block;
+  width: 14.375rem; // 230px — matches the shared Button spec
+  max-width: 100%;
+  margin: 2.5rem auto 0;
+
+  @include bp-max(md) {
+    margin-top: 1.5rem;
+  }
+}

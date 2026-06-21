@@ -1,0 +1,41 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.root {
+  position: relative;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 0.625rem); // 10px below the trigger
+  left: 0;
+  z-index: 60;
+  min-width: 100%;
+  background: $color-white;
+  border: 0.0625rem solid $color-black-100;
+  border-radius: $radius-card;
+  box-shadow: 0 0.75rem 2rem rgba(32, 32, 32, 0.12);
+  animation: popIn 0.14s ease;
+}
+
+.alignEnd {
+  left: auto;
+  right: 0;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

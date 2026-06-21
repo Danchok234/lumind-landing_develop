@@ -1,0 +1,199 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.hero {
+  position: relative;
+  width: 100%;
+  padding: 10.875rem 1.25rem 3.75rem; // clears the fixed header pill
+  overflow: hidden;
+
+  // Same purple shade as the events listing hero.
+  background:
+    linear-gradient(180deg, rgba(131, 85, 248, 0.22) 0%, rgba(246, 246, 246, 0) 38%),
+    var(--color-background);
+
+  @include bp-max(md) {
+    padding-top: 7.5rem;
+    padding-bottom: 2.5rem;
+  }
+}
+
+// ── Decorative dot textures ───────────────────────────────────
+.dots {
+  position: absolute;
+  top: 6rem;
+  width: 31.25rem;
+  height: 31.25rem;
+  background-image: url('/hero-dot-pattern.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.55;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, rgba(0, 0, 0, 0) 70%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 0%, rgba(0, 0, 0, 0) 70%);
+
+  @include bp-max(lg) {
+    display: none;
+  }
+}
+
+.dotsLeft {
+  left: -7rem;
+}
+
+.dotsRight {
+  right: -7rem;
+}
+
+// ── Layout ────────────────────────────────────────────────────
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2.5rem; // 40px
+
+  @include bp-max(md) {
+    gap: 1.75rem;
+  }
+}
+
+// ── Schedule chips ────────────────────────────────────────────
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem; // 10px
+}
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem; // 12px 20px
+  background: $color-white;
+  border: 1px solid $color-black-100;
+  border-radius: $radius-btn;
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 1.0625rem; // 17px
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: $color-black;
+  white-space: nowrap;
+
+  @include bp-max(md) {
+    font-size: 0.9375rem;
+    padding: 0.625rem 1rem;
+  }
+}
+
+.filterDark {
+  background: $color-black;
+  border-color: $color-black;
+  color: $color-white;
+  transition: $transition-base;
+
+  &:hover {
+    background: $color-purple;
+    border-color: $color-purple;
+  }
+}
+
+// ── Title ─────────────────────────────────────────────────────
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.875rem; // 30px
+
+  @include bp-max(md) {
+    gap: 0.75rem;
+  }
+}
+
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 6rem; // 96px
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: $color-black;
+  max-width: 60rem;
+
+  @include bp-max(xl) {
+    font-size: 4.5rem;
+  }
+
+  @include bp-max(md) {
+    font-size: 3.25rem;
+  }
+
+  @include bp-max(xs) {
+    font-size: 2.75rem;
+  }
+}
+
+.subtitle {
+  font-family: $font-satoshi;
+  font-weight: 400;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+  max-width: 38rem;
+
+  @include bp-max(md) {
+    font-size: 0.9375rem;
+    max-width: 90%;
+  }
+}
+
+// ── Purchase ──────────────────────────────────────────────────
+.purchase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem; // 20px
+}
+
+.price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-family: $font-satoshi;
+}
+
+.priceFrom {
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}
+
+.priceValue {
+  font-weight: 500;
+  font-size: 1.5rem; // 24px
+  letter-spacing: -0.02em;
+  color: $color-black;
+}
+
+.buy {
+  min-width: 14.375rem; // 230px — matches the shared Button spec
+}
+
+.note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.disclaimer {
+  font-family: $font-satoshi;
+  font-size: 0.9375rem; // 15px
+  letter-spacing: -0.02em;
+  color: $color-black-250;
+  text-align: center;
+}

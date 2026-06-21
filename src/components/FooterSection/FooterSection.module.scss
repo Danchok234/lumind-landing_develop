@@ -18,7 +18,7 @@
 // Centered content column — Figma desktop content width is 1420px.
 .inner {
   width: 100%;
-  max-width: 1420px;
+  max-width: 1600px; // TEMP: bumped 1420px -> 1600px for review. Undo: restore 1420px.
   margin-inline: auto;
   display: flex;
   flex-direction: column;

@@ -1,0 +1,81 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.section {
+  width: 100%;
+  padding: 3.75rem 1.25rem 5.5rem; // 60px top / 88px bottom
+
+  @include bp-max(md) {
+    padding: 2.5rem 1.25rem 3.5rem;
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; // 32px between pills / toolbar / heading / grid
+}
+
+.headingRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.heading {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 3rem; // 48px
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: $color-black;
+
+  @include bp-max(md) {
+    font-size: 2.125rem; // 34px
+  }
+}
+
+.count {
+  @include text-p;
+  color: $color-black-250;
+  white-space: nowrap;
+}
+
+// ── Empty state ──────────────────────────────────────────────
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 4rem 1.25rem;
+  text-align: center;
+}
+
+.emptyTitle {
+  @include text-h3;
+  color: $color-black;
+}
+
+.emptyText {
+  @include text-p;
+  color: $color-black-700;
+}
+
+.emptyBtn {
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
+  border-radius: $radius-btn;
+  border: 0.0625rem solid $color-purple;
+  background: none;
+  cursor: pointer;
+
+  @include text-btn;
+  color: $color-black;
+  transition: $transition-base;
+
+  &:hover {
+    background: color-mix(in srgb, $color-purple 6%, transparent);
+  }
+}

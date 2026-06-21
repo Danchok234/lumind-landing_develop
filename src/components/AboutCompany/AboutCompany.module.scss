@@ -1,0 +1,146 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.section {
+  width: 100%;
+  padding: 3.75rem 1.25rem; // 60px
+
+  @include bp-max(md) {
+    padding: 2.5rem 1.25rem;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 580fr) minmax(0, 720fr);
+  gap: 5rem; // ~ matches the Figma gap between image and copy
+  align-items: center;
+
+  @include bp-max(lg) {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+// ── Image ─────────────────────────────────────────────────────
+.media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 580 / 452;
+  border-radius: $radius-card;
+  overflow: hidden;
+  background: $color-black-100;
+
+  @include bp-max(lg) {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.image {
+  object-fit: cover;
+}
+
+// ── Copy ──────────────────────────────────────────────────────
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  display: inline-flex;
+  width: 3rem;
+  height: 3rem;
+  border-radius: $radius-btn;
+  overflow: hidden;
+  background: $color-black;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.brandName {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 2rem; // 32px (h3)
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $color-black;
+
+  @include bp-max(md) {
+    font-size: 1.5rem;
+  }
+}
+
+.title {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 3rem; // 48px
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: $color-black;
+
+  @include bp-max(xl) {
+    font-size: 2.5rem;
+  }
+
+  @include bp-max(md) {
+    font-size: 2.125rem; // 34px
+  }
+}
+
+.text {
+  font-family: $font-satoshi;
+  font-size: 1.0625rem; // 17px
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+  max-width: 41.25rem; // 660px
+}
+
+// ── Stats ─────────────────────────────────────────────────────
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1 1 0;
+  min-width: 8rem;
+}
+
+.statValue {
+  font-family: $font-satoshi;
+  font-weight: 500;
+  font-size: 3rem; // 48px
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: $color-purple;
+
+  @include bp-max(xl) {
+    font-size: 2.5rem;
+  }
+
+  @include bp-max(md) {
+    font-size: 2.125rem;
+  }
+}
+
+.statLabel {
+  font-family: $font-satoshi;
+  font-size: 1.0625rem; // 17px
+  letter-spacing: -0.02em;
+  color: $color-black-700;
+}

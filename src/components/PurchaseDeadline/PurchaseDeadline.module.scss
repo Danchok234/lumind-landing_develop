@@ -1,0 +1,9 @@
+@use '@/styles/variables' as *;
+
+.deadline {
+  font-family: $font-satoshi;
+  font-size: 0.9375rem; // 15px
+  letter-spacing: -0.02em;
+  color: $color-error;
+  text-align: center;
+}
